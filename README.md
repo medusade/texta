@@ -1,2 +1,2 @@
-# texta
-texta Text Processing Framework
+# Texta
+Texta Text Processing Framework
