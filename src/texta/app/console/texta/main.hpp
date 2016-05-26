@@ -21,9 +21,11 @@
 #ifndef _TEXTA_APP_CONSOLE_TEXTA_MAIN_HPP
 #define _TEXTA_APP_CONSOLE_TEXTA_MAIN_HPP
 
+#include "texta/t/processor.hpp"
+#include "texta/t/function_list.hpp"
+#include "texta/io/logger.hpp"
 #include "xos/base/getopt/main.hpp"
-
-#define BINARY_TREE_DEBUG
+#include "xos/base/avl/tree.hpp"
 #include "xos/base/binary/tree.hpp"
 
 namespace texta {
@@ -51,11 +53,57 @@ public:
 protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    class _EXPORT_CLASS output: public ::texta::t::output {
+    public:
+        output(main_extends& main): main_(main) {}
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+        virtual ssize_t write(const char* out, ssize_t length) {
+            ssize_t count = main_.out(out, length);
+            return count;
+        }
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+    protected:
+        main_extends& main_;
+    };
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    class _EXPORT_CLASS input: public ::texta::t::input {
+    public:
+        input(main_extends& main): main_(main) {}
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+        virtual ssize_t read(char* in, size_t size) {
+            ssize_t count = main_.in(in, size);
+            return count;
+        }
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+    protected:
+        main_extends& main_;
+    };
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual int run(int argc, char_t** argv, char_t** env) {
         int err = 0;
+        ::texta::t::processor p;
+        if ((p.init())) {
+            output out(*this);
+            input in(*this);
+            ssize_t count = 0;
+            count = p.expand(out, in);
+            p.fini();
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual int _run(int argc, char_t** argv, char_t** env) {
+        int err = 0;
         const char* a2z = "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
-        xos::base::binary::branch b[26];
-        xos::base::binary::tree t;
+        xos::base::avl::branch b[26];
+        xos::base::avl::tree t;
         size_t i, n;
         for (i = (n = xos::base::chars_t::count(a2z)); i > 0; --i) {
             xos::base::leaf& l = b[n-i].leaf();
@@ -63,13 +111,13 @@ protected:
             w.assign(a2z + i - 1, 1);
             t.insert(b[n-i]);
         }
-        for (xos::base::binary::branch* b = t.first();  b; b = t.next(*b)) {
+        for (xos::base::avl::branch* b = t.first();  b; b = t.next(*b)) {
             out(b->leaf().what().chars());
         }
         outln();
         for (i = (n = xos::base::chars_t::count(a2z)); i > 0; --i) {
             t.remove(b[n-i]);
-            for (xos::base::binary::branch* b = t.first();  b; b = t.next(*b)) {
+            for (xos::base::avl::branch* b = t.first();  b; b = t.next(*b)) {
                 out(b->leaf().what().chars());
             }
             outln();
