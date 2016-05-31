@@ -1,0 +1,8 @@
+date                    -- date([month,day,year,(do)])
+day                     -- day([day,(do)])
+month                   -- month([month,(do)])
+year                    -- year([year,(do)])
+time                    -- time([hour,minute,second,(do)])
+hour                    -- hour([hour,(do)])
+minute                  -- minute([minute,(do)])
+second                  -- second([second,(do)])
