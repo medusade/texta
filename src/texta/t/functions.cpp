@@ -42,12 +42,13 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *before = 0, *between = 0, *expr = 0, *name = 0, *desc = 0;
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_functions_function
-  ("functions", "functions((before),(between),(do),name,desc)");
+  ("functions", "functions([(before),(between),(do),name,desc)]");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_parameters_function

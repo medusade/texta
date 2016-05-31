@@ -25,6 +25,39 @@ namespace texta {
 namespace t {
 
 ///////////////////////////////////////////////////////////////////////
+///  Class: date_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS date_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    date_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        xos::os::current::time t;
+        result r;
+        r.append_int(t.month());
+        r.append("/");
+        r.append_int((int)t.day());
+        r.append("/");
+        r.append_int(t.year());
+        out.write(r);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_date_function
+  ("date", "date([month,day,year,(do)])");
+
+///////////////////////////////////////////////////////////////////////
 ///  Class: year_function
 ///////////////////////////////////////////////////////////////////////
 class _EXPORT_CLASS year_function: public function_extend {
@@ -115,14 +148,14 @@ public:
   ("day", "day([day,(do)])");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: date_function
+///  Class: time_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS date_function: public function_extend {
+class _EXPORT_CLASS time_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    date_function(const char *name, const char *description)
+    time_function(const char *name, const char *description)
     : Extends(name, description) {
         static function_parameter parameter[]
         = {{0,0}};
@@ -135,17 +168,108 @@ public:
      const function_argument_list &args) const {
         xos::os::current::time t;
         result r;
-        r.append_int(t.month());
-        r.append("/");
-        r.append_int((int)t.day());
-        r.append("/");
-        r.append_int(t.year());
+        r.append_int(t.hour());
+        r.append(":");
+        r.append_int(t.minute());
+        r.append(":");
+        r.append_int(t.second());
         out.write(r);
+        return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-} the_date_function
-  ("date", "date([month,day,year,(do)])");
+} the_time_function
+  ("time", "time([hour,minute,second,(do)])");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: hour_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS hour_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    hour_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        xos::os::current::time t;
+        result r;
+        r.append_int(t.hour());
+        out.write(r);
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_hour_function
+  ("hour", "hour([hour,(do)])");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: minute_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS minute_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    minute_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        xos::os::current::time t;
+        result r;
+        r.append_int(t.minute());
+        out.write(r);
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_minute_function
+  ("minute", "minute([minute,(do)])");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: second_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS second_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    second_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        xos::os::current::time t;
+        result r;
+        r.append_int(t.second());
+        out.write(r);
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_second_function
+  ("second", "second([second,(do)])");
 
 } // namespace t
 } // namespace texta

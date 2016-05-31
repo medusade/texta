@@ -75,6 +75,10 @@ public:
         depth_ = depth;
         return success;
     }
+
+protected:
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual bool expand(char& nextchar, output& out, input& in, char c) {
         enum state_t {
             STATE_LOOK,
@@ -326,23 +330,33 @@ public:
                 switch(c) {
                 case '(': {
                     string name(name_);
+                    bool failed = false;
                     state = STATE_LOOK;
                     TEXTA_LOG_MESSAGE_DEBUG("expand_arguments(c, out, in, name = \"" << name << "\")...");
-                    if ((success = expand_arguments(c, out, in, name))) {
+                    if ((success = expand_arguments(failed, c, out, in, name))) {
                         TEXTA_LOG_MESSAGE_DEBUG("...expand_arguments(c, out, in, name = \"" << name << "\")");
                     } else {
-                        TEXTA_LOG_ERROR("...failed on expand_arguments(c, out, in, name = \"" << name << "\")");
+                        if ((failed)) {
+                            TEXTA_LOG_ERROR("...failed on expand_arguments(c, out, in, name = \"" << name << "\")");
+                        } else {
+                            TEXTA_LOG_MESSAGE_DEBUG("...expand_arguments(c, out, in, name = \"" << name << "\")");
+                        }
                     }
                     break; }
 
                 default:
                     if (c == mark_) {
+                        bool failed = false;
                         state = STATE_LOOK;
                         TEXTA_LOG_MESSAGE_DEBUG("expand_reference(c, out, in, name_ = \"" << name_ << "\")...");
-                        if ((success = expand_reference(c, out, in, name_))) {
+                        if ((success = expand_reference(failed, c, out, in, name_))) {
                             TEXTA_LOG_MESSAGE_DEBUG("...expand_reference(c, out, in, name_ = \"" << name_ << "\")");
                         } else {
-                            TEXTA_LOG_ERROR("...failed on expand_reference(c, out, in, name_ = \"" << name_ << "\")");
+                            if ((failed)) {
+                                TEXTA_LOG_ERROR("...failed on expand_reference(c, out, in, name_ = \"" << name_ << "\")");
+                            } else {
+                                TEXTA_LOG_MESSAGE_DEBUG("...expand_reference(c, out, in, name_ = \"" << name_ << "\")");
+                            }
                         }
                     } else {
                         name_.append(&c, 1);
@@ -379,10 +393,14 @@ public:
         nextchar = c;
         return result;
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual bool expand_arguments
-    (char& nextchar, output& out, input& in, const string& name) {
+    (bool& failed, char& nextchar, output& out, input& in, const string& name) {
         bool success = true;
         size_t count = 0;
+        failed = true;
         if (1 > (count = in.read(&nextchar, 1))) {
             success = false;
         } else {
@@ -413,6 +431,7 @@ public:
                     TEXTA_LOG_ERROR("...failed on expand_function(out, args, name = \"" << name << "\")...");
                 }
                 if (1 > (count = in.read(&nextchar, 1))) {
+                    failed = (0 > count);
                     success = false;
                 }
             }
@@ -420,9 +439,10 @@ public:
         return success;
     }
     virtual bool expand_reference
-    (char& nextchar, output& out, input& in, const string& name) {
+    (bool& failed, char& nextchar, output& out, input& in, const string& name) {
         bool success = true;
         size_t count = 0;
+        failed = true;
         TEXTA_LOG_MESSAGE_DEBUG("expand_variable(out, name = \"" << name << "\")...");
         if ((success = expand_variable(out, name))) {
             TEXTA_LOG_MESSAGE_DEBUG("...expand_variable(out, name = \"" << name << "\")");
@@ -430,6 +450,7 @@ public:
             TEXTA_LOG_ERROR("...failed on expand_variable(out, name = \"" << name << "\")...");
         }
         if (1 > (count = in.read(&nextchar, 1))) {
+            failed = (0 > count);
             success = false;
         }
         return success;
@@ -469,6 +490,7 @@ public:
         return result;
     }
 
+public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool push_variable_expand(const string& name, input& in) {
@@ -501,6 +523,9 @@ public:
         }
         return false;
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual bool set_variable(const string& name, const string& to) {
         if ((variables_.set_value(name, to))) {
             return true;
@@ -530,6 +555,7 @@ public:
         return success;
     }
 
+protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool init(function_list& l, function_tree& t) {

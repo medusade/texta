@@ -98,6 +98,150 @@ public:
   ("else", "else(cond,(do),(else)...)");
 
 ///////////////////////////////////////////////////////////////////////
+///  Class: if_then_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS if_then_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    if_then_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *a = 0;
+        if ((a = args.first_argument())) {
+            out.write(*a);
+            if ((meets(*a))) {
+                while ((a = a->next_argument())) {
+                    p.expand(out, *a);
+                }
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (0 < (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_if_then_function
+  ("if-then", "if-then(did,(do),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: else_then_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS else_then_function: public if_then_function {
+public:
+    typedef if_then_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    else_then_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (1 > (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_else_then_function
+  ("else-then", "else-then(did,(else),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: then_if_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS then_if_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    then_if_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *todo = 0, *expr = 0;
+        if ((todo = args.first_argument())) {
+            if ((expr = todo->next_argument())) {
+                function_argument did;
+                do {
+                    p.expand(did, *expr);
+                } while ((expr = expr->next_argument()));
+                out.write(did);
+                if ((meets(did))) {
+                    out.write(*todo);
+                }
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (0 < (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_then_if_function
+  ("then-if", "then-if(todo,(do),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: then_else_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS then_else_function: public then_if_function {
+public:
+    typedef then_if_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    then_else_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (1 > (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_then_else_function
+  ("then-else", "then-else(todo,(else),...)");
+
+///////////////////////////////////////////////////////////////////////
 ///  Class: if_no_function
 ///////////////////////////////////////////////////////////////////////
 class _EXPORT_CLASS if_no_function: public if_function {
@@ -196,15 +340,16 @@ public:
   ("else-yes", "else-yes(cond,(do),(else),...)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: case_function
+///  Class: no_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS case_function: public function_extend {
+class _EXPORT_CLASS no_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    case_function(const char *name, const char *description)
-    : Extends(name, description) {
+    no_function
+    (const char *name, const char *description, const char *no = "no")
+    : Extends(name, description), no_(no) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
@@ -214,194 +359,98 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *a = 0;
+        if ((a = args.first_argument())) {
+            if ((meets((*a)))) {
+                while ((a = a->next_argument())) {
+                    p.expand(out, *a);
+                }
+            }
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-} the_case_function
-  ("case", "case(when,(do)[[,...,when,(do),](otherwise)])");
+    virtual bool meets(const function_argument& cond) const {
+        if (!(cond.compare(no_))) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+protected:
+    string no_;
+} the_no_function
+  ("no", "no(cond,(do),...)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: else_then_function
+///  Class: yes_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS else_then_function: public function_extend {
+class _EXPORT_CLASS yes_function: public no_function {
 public:
-    typedef function_extend Extends;
+    typedef no_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    else_then_function(const char *name, const char *description)
-    : Extends(name, description) {
+    yes_function
+    (const char *name, const char *description, const char *yes = "yes")
+    : Extends(name, description, yes) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_else_then_function
-  ("else-then", "else-then(did,(else),...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: if_then_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS if_then_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    if_then_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_if_then_function
-  ("if-then", "if-then(did,(do),...)");
+} the_yes_function
+  ("yes", "yes(cond,(do),...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: not_no_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS not_no_function: public function_extend {
+class _EXPORT_CLASS not_no_function: public no_function {
 public:
-    typedef function_extend Extends;
+    typedef no_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    not_no_function(const char *name, const char *description)
-    : Extends(name, description) {
+    not_no_function
+    (const char *name, const char *description, const char *no = "no")
+    : Extends(name, description, no) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
+    virtual bool meets(const function_argument& cond) const {
+        if ((cond.compare(no_))) {
+            return true;
+        }
+        return false;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_not_no_function
-  ("not-no", "not-no(cond,...)");
+  ("not-no", "not-no(cond,(do),...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: not_yes_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS not_yes_function: public function_extend {
+class _EXPORT_CLASS not_yes_function: public not_no_function {
 public:
-    typedef function_extend Extends;
+    typedef not_no_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    not_yes_function(const char *name, const char *description)
-    : Extends(name, description) {
+    not_yes_function
+    (const char *name, const char *description, const char *yes = "yes")
+    : Extends(name, description, yes) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_not_yes_function
-  ("not-yes", "not-yes(cond,...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: switch_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS switch_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    switch_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_switch_function
-  ("switch", "switch(cond,case,(do)[[,...,case,(do),](otherwise)])");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: then_else_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS then_else_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    then_else_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_then_else_function
-  ("then-else", "then-else(todo,(else),...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: then_if_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS then_if_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    then_if_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_then_if_function
-  ("then-if", "then-if(todo,(do),...)");
+  ("not-yes", "not-yes(cond,(do),...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: equal_function
@@ -479,6 +528,271 @@ public:
     ///////////////////////////////////////////////////////////////////////
 } the_unequal_function
   ("unequal", "unequal(string,...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: case_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS case_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    case_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *cond = 0, *expr = 0;
+        if ((cond = args.first_argument())) {
+            if ((expr = cond->next_argument())) {
+                do {
+                    if ((meets(*cond))) {
+                        p.expand(out, *expr);
+                        break;
+                    }
+                    if ((cond = expr->next_argument())) {
+                        if ((expr = cond->next_argument())) {
+                        } else {
+                            p.expand(out, *cond);
+                        }
+                    }
+                } while ((cond) && (expr));
+            } else {
+                p.expand(out, *cond);
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (0 < (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_case_function
+  ("case", "case(when,(do)[[,...,when,(do),](otherwise)])");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: switch_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS switch_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    switch_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *cond = 0, *value = 0, *expr = 0;
+        if ((cond = args.first_argument())) {
+            if ((value = cond->next_argument())) {
+                if ((expr = value->next_argument())) {
+                    do {
+                        if ((meets(*cond, *value))) {
+                            p.expand(out, *expr);
+                            break;
+                        }
+                        if ((value = expr->next_argument())) {
+                            if ((expr = value->next_argument())) {
+                            } else {
+                                p.expand(out, *value);
+                            }
+                        }
+                    } while ((value) && (expr));
+                } else {
+                    p.expand(out, *value);
+                }
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets
+    (const function_argument& cond, const function_argument& value) const {
+        if (!(cond.compare(value))) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_switch_function
+  ("switch", "switch(cond,case,(do)[[,...,case,(do),](otherwise)])");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: while_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS while_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    while_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *cond = 0, *expr = 0;
+        if ((cond = args.first_argument())) {
+            if ((expr = cond->next_argument())) {
+                bool met = false;
+                function_argument test;
+                do {
+                    if ((p.expand(test, *cond))) {
+                        cond->seek(0);
+                        if ((met = meets(test))) {
+                            if ((p.expand(out, *expr))) {
+                                expr->seek(0);
+                                test.clear();
+                                continue;
+                            }
+                        }
+                    }
+                    break;
+                } while ((met));
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (0 < (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_while_function
+  ("while", "while(cond,(do),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: until_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS until_function: public while_function {
+public:
+    typedef while_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    until_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (1 > (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_until_function
+  ("until", "until(cond,(do),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: do_while_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS do_while_function: public while_function {
+public:
+    typedef while_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    do_while_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *cond = 0, *expr = 0;
+        if ((cond = args.first_argument())) {
+            if ((expr = cond->next_argument())) {
+                bool met = false;
+                function_argument test;
+                do {
+                    if ((p.expand(test, *cond))) {
+                        if ((met = meets(test))) {
+                            test.clear();
+                            do {
+                                if ((met = p.expand(out, *expr))) {
+                                    continue;
+                                }
+                                break;
+                            } while ((expr = expr->next_argument()));
+                            continue;
+                        }
+                    }
+                    break;
+                } while ((met));
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_do_while_function
+  ("do-while", "do-while(cond,(do),...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: do_until_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS do_until_function: public do_while_function {
+public:
+    typedef do_while_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    do_until_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool meets(const function_argument& cond) const {
+        if (1 > (cond.length())) {
+            return true;
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_do_until_function
+  ("do-until", "do-until(cond,(do),...)");
 
 } // namespace t
 } // namespace texta 

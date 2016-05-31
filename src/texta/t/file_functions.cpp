@@ -19,6 +19,7 @@
 ///   Date: 3/22/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/t/functions.hpp"
+#include "xos/fs/path.hpp"
 
 namespace texta {
 namespace t {
@@ -42,6 +43,21 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *a = 0;
+        if ((a = args.first_argument())) {
+            function_argument path;
+            do {
+                path.append(*a);
+            } while ((a = a->next_argument()));
+            expand(out, p, path);
+        }
+        return true;
+    }
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument &arg) const {
+        xos::fs::path path(arg.chars());
+        out.write(path.file_base_path());
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -52,9 +68,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: filedrive_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS filedrive_function: public function_extend {
+class _EXPORT_CLASS filedrive_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     filedrive_function(const char *name, const char *description)
@@ -67,20 +83,24 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        xos::fs::path path(arg.chars());
+        out.write(path.volume());
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_filedrive_function
-  ("filedrive", "filedrive(string,...)");
+  ("filedrive", "filedrive(string,...)"),
+  the_filevolume_function
+  ("filevolume", "filevolume(string,...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: fileextension_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS fileextension_function: public function_extend {
+class _EXPORT_CLASS fileextension_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     fileextension_function(const char *name, const char *description)
@@ -93,7 +113,9 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        xos::fs::path path(arg.chars());
+        out.write(path.file_extension());
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -102,37 +124,11 @@ public:
   ("fileextension", "fileextension(string,...)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: fileextension_separator_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS fileextension_separator_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    fileextension_separator_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_fileextension_separator_function
-  ("fileextension-separator", "fileextension-separator()");
-
-///////////////////////////////////////////////////////////////////////
 ///  Class: filename_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS filename_function: public function_extend {
+class _EXPORT_CLASS filename_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     filename_function(const char *name, const char *description)
@@ -145,7 +141,9 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        xos::fs::path path(arg.chars());
+        out.write(path.file_name());
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -156,9 +154,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: filepath_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS filepath_function: public function_extend {
+class _EXPORT_CLASS filepath_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     filepath_function(const char *name, const char *description)
@@ -171,7 +169,9 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        xos::fs::path path(arg.chars());
+        out.write(path.file_path());
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -198,6 +198,8 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        xos::fs::path path;
+        out.write(&path.directory_separator(), 1);
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -206,14 +208,14 @@ public:
   ("filepath-separator", "filepath-separator()");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: filevolume_function
+///  Class: fileextension_separator_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS filevolume_function: public function_extend {
+class _EXPORT_CLASS fileextension_separator_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    filevolume_function(const char *name, const char *description)
+    fileextension_separator_function(const char *name, const char *description)
     : Extends(name, description) {
         static function_parameter parameter[]
         = {{0,0}};
@@ -224,12 +226,14 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        xos::fs::path path;
+        out.write(&path.extension_separator(), 1);
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-} the_filevolume_function
-  ("filevolume", "filevolume(string,...)");
+} the_fileextension_separator_function
+  ("fileextension-separator", "fileextension-separator()");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: filevolume_separator_function
@@ -250,6 +254,8 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        xos::fs::path path;
+        out.write(&path.volume_separator(), 1);
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -260,9 +266,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: getenv_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS getenv_function: public function_extend {
+class _EXPORT_CLASS getenv_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     getenv_function(const char *name, const char *description)
@@ -275,7 +281,13 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        const char *chars = 0;
+        if ((chars = arg.chars()) && (chars[0])) {
+            if ((chars = getenv(chars))) {
+                out.write(chars);
+            }
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -286,9 +298,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: import_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS import_function: public function_extend {
+class _EXPORT_CLASS import_function: public filebase_function {
 public:
-    typedef function_extend Extends;
+    typedef filebase_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     import_function(const char *name, const char *description)
@@ -301,7 +313,24 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const function_argument &arg) const {
+        const char *chars = 0;
+        if ((chars = arg.chars()) && (chars[0])) {
+            input_file f;
+            if ((f.open(chars))) {
+                expand(out, p, f);
+                f.close();
+            }
+        }
+        return true;
+    }
+    virtual bool expand
+    (output &out, processor &p, input_file &f) const {
+        ssize_t count = 0;
+        char c = 0;
+        while (0 < (count = f.read(&c, 1))) {
+            out.write(&c, 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -312,9 +341,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: include_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS include_function: public function_extend {
+class _EXPORT_CLASS include_function: public import_function {
 public:
-    typedef function_extend Extends;
+    typedef import_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     include_function(const char *name, const char *description)
@@ -326,8 +355,8 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
+    (output &out, processor &p, input_file &f) const {
+        p.expand(out, f);
         return true;
     }
     ///////////////////////////////////////////////////////////////////////

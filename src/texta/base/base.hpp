@@ -21,7 +21,11 @@
 #ifndef _TEXTA_BASE_BASE_HPP
 #define _TEXTA_BASE_BASE_HPP
 
+#include "xos/io/write/file.hpp"
+#include "xos/io/file/writer.hpp"
 #include "xos/io/writer.hpp"
+#include "xos/io/read/file.hpp"
+#include "xos/io/file/reader.hpp"
 #include "xos/io/reader.hpp"
 #include "xos/base/avl/branch.hpp"
 #include "xos/base/avl/tree.hpp"
