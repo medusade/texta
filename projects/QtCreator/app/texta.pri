@@ -28,6 +28,8 @@ $${texta_DEFINES} \
 ########################################################################
 # xos
 texta_HEADERS += \
+$${XOS_SRC}/xos/fs/path.hpp \
+$${XOS_SRC}/xos/io/file/reader.hpp \
 $${XOS_SRC}/xos/base/redblack/tree.hpp \
 $${XOS_SRC}/xos/base/redblack/branch.hpp \
 $${XOS_SRC}/xos/base/avl/tree.hpp \
@@ -42,6 +44,7 @@ $${XOS_SRC}/xos/base/item.hpp \
 $${XOS_SRC}/xos/base/to_string.hpp \
 
 texta_SOURCES += \
+$${XOS_SRC}/xos/fs/path.cpp \
 $${XOS_SRC}/xos/base/redblack/tree.cpp \
 $${XOS_SRC}/xos/base/redblack/branch.cpp \
 $${XOS_SRC}/xos/base/leaf.cpp \
