@@ -20,6 +20,7 @@
 ########################################################################
 include(../../../../QtCreator/texta.pri)
 include(../../../../QtCreator/app/texta.pri)
+include(../../../../QtCreator/app/texta_functions.pri)
 include(../../texta.pri)
 
 TARGET = texta

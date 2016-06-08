@@ -26,42 +26,45 @@ texta_DEFINES += \
 $${texta_DEFINES} \
 
 ########################################################################
-# xos
+# nadir
 texta_HEADERS += \
-$${XOS_SRC}/xos/fs/path.hpp \
-$${XOS_SRC}/xos/io/file/reader.hpp \
-$${XOS_SRC}/xos/base/redblack/tree.hpp \
-$${XOS_SRC}/xos/base/redblack/branch.hpp \
-$${XOS_SRC}/xos/base/avl/tree.hpp \
-$${XOS_SRC}/xos/base/avl/branch.hpp \
-$${XOS_SRC}/xos/base/binary/tree.hpp \
-$${XOS_SRC}/xos/base/binary/branch.hpp \
-$${XOS_SRC}/xos/base/tree.hpp \
-$${XOS_SRC}/xos/base/branch.hpp \
-$${XOS_SRC}/xos/base/leaf.hpp \
-$${XOS_SRC}/xos/base/list.hpp \
-$${XOS_SRC}/xos/base/item.hpp \
-$${XOS_SRC}/xos/base/to_string.hpp \
+$${NADIR_SRC}/xos/fs/path.hpp \
+$${NADIR_SRC}/xos/io/file/reader.hpp \
+$${NADIR_SRC}/xos/base/redblack/tree.hpp \
+$${NADIR_SRC}/xos/base/redblack/branch.hpp \
+$${NADIR_SRC}/xos/base/avl/tree.hpp \
+$${NADIR_SRC}/xos/base/avl/branch.hpp \
+$${NADIR_SRC}/xos/base/binary/tree.hpp \
+$${NADIR_SRC}/xos/base/binary/branch.hpp \
+$${NADIR_SRC}/xos/base/tree.hpp \
+$${NADIR_SRC}/xos/base/branch.hpp \
+$${NADIR_SRC}/xos/base/leaf.hpp \
+$${NADIR_SRC}/xos/base/list.hpp \
+$${NADIR_SRC}/xos/base/item.hpp \
+$${NADIR_SRC}/xos/base/to_string.hpp \
 
 texta_SOURCES += \
-$${XOS_SRC}/xos/fs/path.cpp \
-$${XOS_SRC}/xos/base/redblack/tree.cpp \
-$${XOS_SRC}/xos/base/redblack/branch.cpp \
-$${XOS_SRC}/xos/base/leaf.cpp \
-$${XOS_SRC}/xos/base/list.cpp \
-$${XOS_SRC}/xos/base/item.cpp \
-$${XOS_SRC}/xos/base/to_string.cpp \
+$${NADIR_SRC}/xos/fs/path.cpp \
+$${NADIR_SRC}/xos/base/redblack/tree.cpp \
+$${NADIR_SRC}/xos/base/redblack/branch.cpp \
+$${NADIR_SRC}/xos/base/leaf.cpp \
+$${NADIR_SRC}/xos/base/list.cpp \
+$${NADIR_SRC}/xos/base/item.cpp \
+$${NADIR_SRC}/xos/base/to_string.cpp \
 
 _texta_SOURCES += \
-$${XOS_SRC}/xos/base/avl/tree.cpp \
-$${XOS_SRC}/xos/base/avl/branch.cpp \
-$${XOS_SRC}/xos/base/binary/tree.cpp \
-$${XOS_SRC}/xos/base/binary/branch.cpp \
+$${NADIR_SRC}/xos/base/avl/tree.cpp \
+$${NADIR_SRC}/xos/base/avl/branch.cpp \
+$${NADIR_SRC}/xos/base/binary/tree.cpp \
+$${NADIR_SRC}/xos/base/binary/branch.cpp \
 
 ########################################################################
 # texta
 texta_HEADERS += \
 $${TEXTA_SRC}/texta/app/console/texta/main.hpp \
+$${TEXTA_SRC}/texta/console/main.hpp \
+$${TEXTA_SRC}/texta/console/main_main.hpp \
+$${TEXTA_SRC}/texta/console/main_opt.hpp \
 $${TEXTA_SRC}/texta/t/processor.hpp \
 $${TEXTA_SRC}/texta/t/functions.hpp \
 $${TEXTA_SRC}/texta/t/function_extend.hpp \
@@ -78,6 +81,7 @@ $${TEXTA_SRC}/texta/t/function_parameter.hpp \
 $${TEXTA_SRC}/texta/t/variable.hpp \
 $${TEXTA_SRC}/texta/t/variable_tree.hpp \
 $${TEXTA_SRC}/texta/t/variable_branch.hpp \
+$${TEXTA_SRC}/texta/t/variable_leaf.hpp \
 $${TEXTA_SRC}/texta/t/variable_list.hpp \
 $${TEXTA_SRC}/texta/t/variable_item.hpp \
 $${TEXTA_SRC}/texta/t/value.hpp \
@@ -91,15 +95,9 @@ $${TEXTA_SRC}/texta/base/base.hpp \
 
 texta_SOURCES += \
 $${TEXTA_SRC}/texta/app/console/texta/main.cpp \
+$${TEXTA_SRC}/texta/console/main_main.cpp \
+$${TEXTA_SRC}/texta/console/main_opt.cpp \
 $${TEXTA_SRC}/texta/t/processor.cpp \
-$${TEXTA_SRC}/texta/t/file_functions.cpp \
-$${TEXTA_SRC}/texta/t/string_functions.cpp \
-$${TEXTA_SRC}/texta/t/time_functions.cpp \
-$${TEXTA_SRC}/texta/t/logical_functions.cpp \
-$${TEXTA_SRC}/texta/t/conditional_functions.cpp \
-$${TEXTA_SRC}/texta/t/block_functions.cpp \
-$${TEXTA_SRC}/texta/t/base_functions.cpp \
-$${TEXTA_SRC}/texta/t/functions.cpp \
 $${TEXTA_SRC}/texta/t/function_extend.cpp \
 $${TEXTA_SRC}/texta/t/function_named.cpp \
 $${TEXTA_SRC}/texta/t/function_tree.cpp \
@@ -114,6 +112,7 @@ $${TEXTA_SRC}/texta/t/function_parameter.cpp \
 $${TEXTA_SRC}/texta/t/variable.cpp \
 $${TEXTA_SRC}/texta/t/variable_tree.cpp \
 $${TEXTA_SRC}/texta/t/variable_branch.cpp \
+$${TEXTA_SRC}/texta/t/variable_leaf.cpp \
 $${TEXTA_SRC}/texta/t/variable_list.cpp \
 $${TEXTA_SRC}/texta/t/variable_item.cpp \
 $${TEXTA_SRC}/texta/t/value.cpp \
@@ -128,14 +127,16 @@ $${TEXTA_SRC}/texta/base/base.cpp \
 ########################################################################
 # xos
 texta_HEADERS += \
-$${XOS_SRC}/xos/base/getopt/main_opt.hpp \
-$${XOS_SRC}/xos/base/getopt/main.hpp \
-$${XOS_SRC}/xos/base/main.hpp \
-$${XOS_SRC}/xos/base/main_main.hpp \
+$${NADIR_SRC}/xos/base/getopt/main_opt.hpp \
+$${NADIR_SRC}/xos/base/getopt/main.hpp \
+$${NADIR_SRC}/xos/base/main.hpp \
+$${NADIR_SRC}/xos/base/main_main.hpp \
 
 texta_SOURCES += \
-$${XOS_SRC}/xos/base/getopt/main_opt.cpp \
-$${XOS_SRC}/xos/base/main_main.cpp \
+
+_texta_SOURCES += \
+$${NADIR_SRC}/xos/base/main_main.cpp \
+$${NADIR_SRC}/xos/base/getopt/main_opt.cpp \
 
 ########################################################################
 texta_LIBS += \

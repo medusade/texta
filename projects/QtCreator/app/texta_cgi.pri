@@ -13,28 +13,37 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: texta.pri
+#   File: texta_cgi.pri
 #
 # Author: $author$
-#   Date: 3/18/2016
+#   Date: 6/4/2016
 ########################################################################
 
-TEXTA_OS = macosx
+texta_cgi_INCLUDEPATH += \
+$${texta_INCLUDEPATH} \
+
+texta_cgi_DEFINES += \
+$${texta_DEFINES} \
 
 ########################################################################
-# nadir
-NADIR_BLD = ../$${NADIR_PKG}/build/$${TEXTA_OS}/QtCreator/$${TEXTA_CONFIG}
-NADIR_LIB = $${NADIR_BLD}/lib
+# texta_cgi
+texta_cgi_HEADERS += \
+$${TEXTA_SRC}/texta/app/cgi/texta/main.hpp \
+$${TEXTA_SRC}/texta/inet/cgi/main.hpp \
+
+texta_cgi_SOURCES += \
+$${TEXTA_SRC}/texta/app/cgi/texta/main.cpp \
 
 ########################################################################
-# texta
-texta_INCLUDEPATH += \
+# coral
+texta_cgi_HEADERS += \
+$${CORAL_SRC}/coral/app/cgi/main.hpp \
+$${CORAL_SRC}/coral/console/main.hpp \
+$${CORAL_SRC}/coral/console/main_main.hpp \
 
-texta_DEFINES += \
+texta_cgi_SOURCES += \
+$${CORAL_SRC}/coral/console/main_main.cpp \
 
-texta_LIBS += \
--L$${NADIR_LIB}/libxosnadir \
--lxosnadir \
--lpthread \
--ldl \
-
+########################################################################
+texta_cgi_LIBS += \
+$${texta_LIBS} \

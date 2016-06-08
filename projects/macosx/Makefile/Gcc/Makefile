@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 1988-2016 $organization$
+# Copyright (c) 1988-2014 $organization$
 #
 # This software is provided by the author and contributors ``as is''
 # and any express or implied warranties, including, but not limited to,
@@ -13,28 +13,28 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: texta.pri
+#   File: Makefile
 #
 # Author: $author$
-#   Date: 3/18/2016
+#   Date: 11/22/2014
+#
+# MacOSX Gcc Makefile for talas
 ########################################################################
+PKG = ../../../..
 
-TEXTA_OS = macosx
+PRJ = projects/macosx/Makefile/Gcc
+SRC = src
 
-########################################################################
-# nadir
-NADIR_BLD = ../$${NADIR_PKG}/build/$${TEXTA_OS}/QtCreator/$${TEXTA_CONFIG}
-NADIR_LIB = $${NADIR_BLD}/lib
+include $(PKG)/$(PRJ)/Makedefines
 
-########################################################################
-# texta
-texta_INCLUDEPATH += \
+#
+# Source subdirs
+#
+#SRC_DIRS = \
+#$(PKG)/$(PRJ)/somedir \
+#
+SRC_DIRS = \
+$(PKG)/$(PRJ)/lib \
+$(PKG)/$(PRJ)/app \
 
-texta_DEFINES += \
-
-texta_LIBS += \
--L$${NADIR_LIB}/libxosnadir \
--lxosnadir \
--lpthread \
--ldl \
-
+include $(PKG)/$(PRJ)/Makedirs

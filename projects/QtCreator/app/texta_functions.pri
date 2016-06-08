@@ -13,28 +13,20 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: texta.pri
+#   File: texta_functions.pri
 #
 # Author: $author$
-#   Date: 3/18/2016
+#   Date: 6/4/2016
 ########################################################################
-
-TEXTA_OS = macosx
-
-########################################################################
-# nadir
-NADIR_BLD = ../$${NADIR_PKG}/build/$${TEXTA_OS}/QtCreator/$${TEXTA_CONFIG}
-NADIR_LIB = $${NADIR_BLD}/lib
 
 ########################################################################
 # texta
-texta_INCLUDEPATH += \
-
-texta_DEFINES += \
-
-texta_LIBS += \
--L$${NADIR_LIB}/libxosnadir \
--lxosnadir \
--lpthread \
--ldl \
-
+texta_SOURCES += \
+$${TEXTA_SRC}/texta/t/file_functions.cpp \
+$${TEXTA_SRC}/texta/t/string_functions.cpp \
+$${TEXTA_SRC}/texta/t/time_functions.cpp \
+$${TEXTA_SRC}/texta/t/logical_functions.cpp \
+$${TEXTA_SRC}/texta/t/conditional_functions.cpp \
+$${TEXTA_SRC}/texta/t/block_functions.cpp \
+$${TEXTA_SRC}/texta/t/base_functions.cpp \
+$${TEXTA_SRC}/texta/t/functions.cpp \

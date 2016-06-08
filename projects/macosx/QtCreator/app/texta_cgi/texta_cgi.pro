@@ -13,28 +13,32 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: texta.pri
+#   File: texta_cgi.pro
 #
 # Author: $author$
-#   Date: 3/18/2016
+#   Date: 6/4/2016
 ########################################################################
+include(../../../../QtCreator/texta.pri)
+include(../../texta.pri)
+include(../../../../QtCreator/app/texta_cgi.pri)
+include(../../../../QtCreator/app/texta_functions.pri)
 
-TEXTA_OS = macosx
+TARGET = texta_cgi
+
+INCLUDEPATH += \
+$${texta_cgi_INCLUDEPATH} \
+
+DEFINES += \
+$${texta_cgi_DEFINES} \
 
 ########################################################################
-# nadir
-NADIR_BLD = ../$${NADIR_PKG}/build/$${TEXTA_OS}/QtCreator/$${TEXTA_CONFIG}
-NADIR_LIB = $${NADIR_BLD}/lib
+HEADERS += \
+$${texta_cgi_HEADERS} \
+
+SOURCES += \
+$${texta_cgi_SOURCES} \
+$${texta_SOURCES} \
 
 ########################################################################
-# texta
-texta_INCLUDEPATH += \
-
-texta_DEFINES += \
-
-texta_LIBS += \
--L$${NADIR_LIB}/libxosnadir \
--lxosnadir \
--lpthread \
--ldl \
-
+LIBS += \
+$${texta_cgi_LIBS} \

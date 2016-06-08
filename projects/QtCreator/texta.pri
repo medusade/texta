@@ -33,29 +33,48 @@ TEXTA_CONFIG = Release
 }
 
 ########################################################################
-# xos
-XOS_PKG = $${TEXTA_PKG}/../nadir
-XOS_PRJ = $${XOS_PKG}
-XOS_SRC = $${XOS_PKG}/src
+# nadir
+NADIR_PKG = $${TEXTA_PKG}/../nadir
+NADIR_PRJ = $${NADIR_PKG}
+NADIR_SRC = $${NADIR_PKG}/src
 
-xos_INCLUDEPATH += \
-$${XOS_SRC} \
+nadir_INCLUDEPATH += \
+$${NADIR_SRC} \
 
-xos_DEFINES += \
+nadir_DEFINES += \
+
+########################################################################
+# coral
+CORAL_PKG = $${TEXTA_PKG}/../coral
+CORAL_PRJ = $${CORAL_PKG}
+CORAL_SRC = $${CORAL_PKG}/src
+
+coral_INCLUDEPATH += \
+$${CORAL_SRC} \
+
+coral_DEFINES += \
+
+########################################################################
+# medusa
+MEDUSA_PKG = $${TEXTA_PKG}/../medusa
+MEDUSA_PRJ = $${MEDUSA_PKG}
+MEDUSA_SRC = $${MEDUSA_PKG}/src
+
+medusa_INCLUDEPATH += \
+$${MEDUSA_SRC} \
+
+medusa_DEFINES += \
 
 ########################################################################
 # texta
 texta_INCLUDEPATH += \
 $${TEXTA_SRC} \
-$${xos_INCLUDEPATH} \
+$${nadir_INCLUDEPATH} \
+$${coral_INCLUDEPATH} \
+$${medusa_INCLUDEPATH} \
 
 texta_DEFINES += \
-$${xos_DEFINES} \
+$${nadir_DEFINES} \
+$${coral_DEFINES} \
+$${medusa_DEFINES} \
 
-texta_HEADERS += \
-
-texta_SOURCES += \
-
-_texta_LIBS += \
--L$${texta_LIB}/libtexta \
--ltexta \
