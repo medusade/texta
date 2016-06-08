@@ -34,7 +34,8 @@ public:
     and_function(const char *name, const char *description)
     : Extends(name, description) {
         static function_parameter parameter[]
-        = {{0,0}};
+        = {{"cond", "cond,..."},
+           {0,0}};
         set_parameter(parameter);
     }
     ///////////////////////////////////////////////////////////////////////
@@ -42,6 +43,18 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        if ((arg = args.first_argument())) {
+           result r;
+           do {
+               if ((arg->length())) {
+                   r.append(*arg);
+               } else {
+                   return true;
+               }
+           } while ((arg = arg->next_argument()));
+           out.write(r);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -68,6 +81,15 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        if ((arg = args.first_argument())) {
+           do {
+               if ((arg->length())) {
+                   out.write(*arg);
+                   break;
+               }
+           } while ((arg = arg->next_argument()));
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -94,6 +116,19 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        if ((arg = args.first_argument())) {
+           result r;
+           do {
+               if ((arg->length())) {
+                   if ((r.length())) {
+                       return true;
+                   }
+                   r.append(*arg);
+               }
+           } while ((arg = arg->next_argument()));
+           out.write(r);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -109,8 +144,9 @@ public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    not_function(const char *name, const char *description)
-    : Extends(name, description) {
+    not_function
+    (const char *name, const char *description, const char *_true = "true")
+    : Extends(name, description), true_(_true) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
@@ -120,10 +156,24 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        if ((arg = args.first_argument())) {
+           result r;
+           do {
+               if ((arg->length())) {
+                   return true;
+               } else {
+                   r.append(true_);
+               }
+           } while ((arg = arg->next_argument()));
+           out.write(r);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+protected:
+    string true_;
 } the_not_function
   ("not", "not(cond,...)");
 

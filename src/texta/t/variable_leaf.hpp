@@ -13,57 +13,57 @@
 /// or otherwise) arising in any way out of the use of this software,
 /// even if advised of the possibility of such damage.
 ///
-///   File: variable_branch.hpp
+///   File: variable_leaf.hpp
 ///
 /// Author: $author$
-///   Date: 5/21/2016
+///   Date: 6/3/2016
 ///////////////////////////////////////////////////////////////////////
-#ifndef _TEXTA_T_VARIABLE_BRANCH_HPP
-#define _TEXTA_T_VARIABLE_BRANCH_HPP
+#ifndef _TEXTA_T_VARIABLE_LEAF_HPP
+#define _TEXTA_T_VARIABLE_LEAF_HPP
 
-#include "texta/t/variable_leaf.hpp"
 #include "texta/t/t.hpp"
 
 namespace texta {
 namespace t {
 
-typedef xos::base::avl::branch_implements variable_branch_implements;
-typedef xos::base::avl::brancht
-<variable_leaf, variable_branch, variable_branch_implements,
- xos::base::binary::brancht
- <variable_leaf, variable_branch, xos::base::binary::branch_implements,
-  xos::base::brancht<variable_leaf, variable_branch,
-  xos::base::branch_implements, xos::base::branch_extends> > > variable_branch_extends;
+class _EXPORT_CLASS variable;
+class _EXPORT_CLASS variable_branch;
+
+typedef implement_base variable_leaf_implements;
+typedef string variable_leaf_extends;
 ///////////////////////////////////////////////////////////////////////
-///  Class: variable_branch
+///  Class: variable_leaf
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS variable_branch:
-virtual public variable_branch_implements, public variable_branch_extends {
+class _EXPORT_CLASS variable_leaf
+: virtual public variable_leaf_implements, public variable_leaf_extends {
 public:
-    typedef variable_branch_implements Implements;
-    typedef variable_branch_extends Extends;
+    typedef variable_leaf_implements Implements;
+    typedef variable_leaf_extends Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    variable_branch(variable_leaf f): Extends(f) {
+    variable_leaf(const char* name, t::variable& variable)
+    : Extends(name), variable_(variable) {
     }
-    virtual ~variable_branch() {
+    variable_leaf(const string& name, t::variable& variable)
+    : Extends(name), variable_(variable) {
     }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual int compare(const leaf_t& to) const {
-        int unequal = this->leaf().compare(to);
-        return unequal;
+    variable_leaf(const variable_leaf& copy)
+    : Extends(copy), variable_(copy.variable()) {
+    }
+    virtual ~variable_leaf() {
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual t::variable& variable() const {
-        return this->leaf().variable();
+        return (t::variable&)variable_;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+protected:
+    t::variable& variable_;
 };
 
 } // namespace t
 } // namespace texta
 
-#endif // _TEXTA_T_VARIABLE_BRANCH_HPP
+#endif // _TEXTA_T_VARIABLE_LEAF_HPP

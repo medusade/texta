@@ -217,19 +217,52 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *val = 0, *delim = 0;
+        if ((val = args.first_argument()) && (0 < val->length())
+            && (delim = val->next_argument()) && (0 < delim->length())) {
+            return expand
+            (out, p, val->chars(), val->length(),
+             delim->chars(), delim->length());
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        const char *found = 0;
+        TEXTA_LOG_MESSAGE_DEBUG("chars_t::find(" << chars_to_string(val_chars) << ", " << chars_to_string(delim_chars) << ")...");
+        if ((found = chars_t::find(val_chars, delim_chars))) {
+            TEXTA_LOG_MESSAGE_DEBUG("..." << chars_to_string(val_chars, found - val_chars) << " = chars_t::find(" << chars_to_string(val_chars) << ", " << chars_to_string(delim_chars) << ")");
+            expand(out, p, found, val_chars, val_length, delim_chars, delim_length);
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *found,
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        out.write(val_chars, found - val_chars);
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_left_function
-  ("left", "left(string,pattern)");
+  ("left", "left(string,pattern)"),
+  the_l_function
+  ("l", "l(string,pattern)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: right_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS right_function: public function_extend {
+class _EXPORT_CLASS right_function: public left_function {
 public:
-    typedef function_extend Extends;
+    typedef left_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     right_function(const char *name, const char *description)
@@ -242,13 +275,94 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        const char *found = 0;
+        TEXTA_LOG_MESSAGE_DEBUG("chars_t::find_reverse(" << chars_to_string(val_chars) << ", " << chars_to_string(delim_chars) << ")...");
+        if ((found = chars_t::find_reverse(val_chars, delim_chars))) {
+            TEXTA_LOG_MESSAGE_DEBUG("..." << chars_to_string(found + delim_length) << " = chars_t::find_reverse(" << chars_to_string(val_chars) << ", " << chars_to_string(delim_chars) << ")");
+            expand(out, p, found, val_chars, val_length, delim_chars, delim_length);
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *found,
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        out.write(found + delim_length, val_chars + val_length - (found + delim_length));
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_right_function
-  ("right", "right(string,pattern)");
+  ("right", "right(string,pattern)"),
+  the_r_function
+   ("r", "r(string,pattern)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: left_of_right_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS left_of_right_function: public right_function {
+public:
+    typedef right_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    left_of_right_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *found,
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        out.write(val_chars, found - val_chars);
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_left_of_right_function
+  ("left-of-right", "left-of-right(string,pattern)"),
+  the_lr_function
+  ("lr", "lr(string,pattern)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: right_of_left_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS right_of_left_function: public left_function {
+public:
+    typedef left_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    right_of_left_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *found,
+     const char *val_chars, size_t val_length,
+     const char *delim_chars, size_t delim_length) const {
+        out.write(found + delim_length, val_length - (found + delim_length - val_chars));
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_right_of_left_function
+  ("right-of-left", "right-of-left(string,pattern)"),
+  the_rl_function
+  ("rl", "rl(string,pattern)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: left_char_function
@@ -269,142 +383,18 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *val = 0;
+        if ((val = args.first_argument()) && (0 < val->length())) {
+            out.write(val->chars(), 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_left_char_function
-  ("left-char", "left-char(string)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: left_chars_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS left_chars_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    left_chars_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_left_chars_function
-  ("left-chars", "left-chars(string)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: left_of_right_char_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS left_of_right_char_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    left_of_right_char_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_left_of_right_char_function
-  ("left-of-right-char", "left-of-right-char(string)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: left_of_right_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS left_of_right_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    left_of_right_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_left_of_right_function
-  ("left-of-right", "left-of-right(string,pattern)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: length_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS length_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    length_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_length_function
-  ("length", "length(string,...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: replace_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS replace_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    replace_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_replace_function
-  ("replace", "replace(from,to,string,...)");
+  ("left-char", "left-char(string)"),
+  the_lc_function
+  ("lc", "lc(string)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: right_char_function
@@ -425,22 +415,28 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *val = 0;
+        if ((val = args.first_argument()) && (0 < val->length())) {
+            out.write(val->chars() + val->length() - 1, 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_right_char_function
-  ("right-char", "right-char(string)");
+  ("right-char", "right-char(string)"),
+  the_rc_function
+  ("rc", "rc(string)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: right_chars_function
+///  Class: left_of_right_char_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS right_chars_function: public function_extend {
+class _EXPORT_CLASS left_of_right_char_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    right_chars_function(const char *name, const char *description)
+    left_of_right_char_function(const char *name, const char *description)
     : Extends(name, description) {
         static function_parameter parameter[]
         = {{0,0}};
@@ -451,12 +447,20 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *val = 0;
+        if ((val = args.first_argument()) && (1 < val->length())) {
+            out.write(val->chars(), val->length() - 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-} the_right_chars_function
-  ("right-chars", "right-chars(string)");
+} the_left_of_right_char_function
+  ("left-of-right-char", "left-of-right-char(string)"),
+  the_lrc_function
+  ("lrc", "lrc(string)"),
+  the_left_chars_function
+  ("left-chars", "left-chars(string)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: right_of_left_char_function
@@ -477,22 +481,30 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *val = 0;
+        if ((val = args.first_argument()) && (1 < val->length())) {
+            out.write(val->chars() + 1, val->length() - 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_right_of_left_char_function
-  ("right-of-left-char", "right-of-left-char(string)");
+  ("right-of-left-char", "right-of-left-char(string)"),
+  the_rlc_function
+  ("rlc", "rlc(string)"),
+  the_right_chars_function
+  ("right-chars", "right-chars(string)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: right_of_left_function
+///  Class: padd_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS right_of_left_function: public function_extend {
+class _EXPORT_CLASS padd_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    right_of_left_function(const char *name, const char *description)
+    padd_function(const char *name, const char *description)
     : Extends(name, description) {
         static function_parameter parameter[]
         = {{0,0}};
@@ -503,64 +515,148 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        size_t length = 0;
+        if ((arg = args.first_argument())) {
+            out.write(arg->chars(), (length = arg->length()));
+            expand(out, p, arg, length);
+        }
         return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_right_of_left_function
-  ("right-of-left", "right-of-left(string,pattern)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: strlen_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS strlen_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    strlen_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     function_argument *arg, size_t length) const {
+        function_argument *padding = 0, *paddlen = 0;
+        size_t padding_length = 0, padd_length = 0;
+        if ((padding = arg->next_argument()) && (padding_length = padding->length())
+            && (paddlen = padding->next_argument()) && (paddlen->length())) {
+            if ((0 < (padd_length = paddlen->to_unsigned())) && (padd_length > length)) {
+                do {
+                    if (length + padding_length > padd_length) {
+                        padding_length = padd_length - length;
+                    }
+                    out.write(padding->chars(), padding_length);
+                    padd_length -= padding_length;
+                } while (padd_length > length);
+            }
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-} the_strlen_function
-  ("strlen", "strlen(string,...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: strpad_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS strpad_function: public function_extend {
-public:
-    typedef function_extend Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    strpad_function(const char *name, const char *description)
-    : Extends(name, description) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool expand
-    (output &out, processor &p,
-     const function_argument_list &args) const {
-        return true;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_strpad_function
+} the_padd_function
+  ("padd", "padd(string,...,padding,padlen)"),
+  the_rpadd_function
+  ("rpadd", "rpadd(string,...,padding,padlen)"),
+  the_right_padd_function
+  ("right-padd", "right-padd(string,...,padding,padlen)"),
+  the_strpad_function
   ("strpad", "strpad(string,...,padding,padlen)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: left_padd_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS left_padd_function: public padd_function {
+public:
+    typedef padd_function Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    left_padd_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    using Extends::expand;
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *arg = 0;
+        size_t length = 0;
+        if ((arg = args.first_argument())) {
+            expand(out, p, arg, length = arg->length());
+            out.write(arg->chars(), length);
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_left_padd_function
+  ("left-padd", "left-padd(string,...,padding,padlen)"),
+  the_lpadd_function
+  ("lpadd", "lpadd(string,...,padding,padlen)"),
+  the_lp_function
+  ("lp", "lp(string,...,padding,padlen)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: replace_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS replace_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    replace_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *from = 0, *to = 0, *arg = 0;
+        if ((from = args.first_argument())
+            && (to = from->next_argument())
+            && (arg = to->next_argument())){
+            do {
+                if (!(expand
+                    (out, p,
+                     from->chars(), from->length(),
+                     to->chars(), to->length(),
+                     arg->chars(), arg->length()))) {
+                    break;
+                }
+            } while ((arg = arg->next_argument()));
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *from, size_t from_length,
+     const char *to, size_t to_length,
+     const char *chars, size_t length) const {
+        if ((length)) {
+            if ((from_length)) {
+                const char *found = 0;
+                do {
+                    if ((found = chars_t::find(chars, from))) {
+                        out.write(chars, found - chars);
+                        out.write(to, to_length);
+                        length -= ((found - chars) + from_length);
+                        chars = found + from_length;
+                    } else {
+                        out.write(chars, length);
+                    }
+                } while ((found));
+            } else {
+                out.write(chars, length);
+            }
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_replace_function
+  ("replace", "replace(from,to,string,...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: tolower_function
@@ -581,6 +677,23 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
+        function_argument *arg = 0;
+        for (arg = args.first_argument(); arg; arg = arg->next_argument()) {
+            expand(out, p, arg->chars(), arg->length());
+        }
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const char *chars, size_t length) const {
+        for (char c = 0; (chars) && (length); --length, ++chars) {
+            if (((c = *chars) >= 'A') && (c <= 'Z')) {
+                c = (c - 'A') + 'a';
+            }
+            out.write(&c, 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -591,9 +704,9 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///  Class: toupper_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS toupper_function: public function_extend {
+class _EXPORT_CLASS toupper_function: public tolower_function {
 public:
-    typedef function_extend Extends;
+    typedef tolower_function Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     toupper_function(const char *name, const char *description)
@@ -606,13 +719,53 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand
     (output &out, processor &p,
-     const function_argument_list &args) const {
+     const char *chars, size_t length) const {
+        for (char c = 0; (chars) && (length); --length, ++chars) {
+            if (((c = *chars) >= 'a') && (c <= 'z')) {
+                c = (c - 'a') + 'A';
+            }
+            out.write(&c, 1);
+        }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_toupper_function
   ("toupper", "toupper(string,...)");
+
+///////////////////////////////////////////////////////////////////////
+///  Class: length_function
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS length_function: public function_extend {
+public:
+    typedef function_extend Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    length_function(const char *name, const char *description)
+    : Extends(name, description) {
+        static function_parameter parameter[]
+        = {{0,0}};
+        set_parameter(parameter);
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual bool expand
+    (output &out, processor &p,
+     const function_argument_list &args) const {
+        function_argument *arg = 0;
+        size_t length = 0;
+        for (arg = args.first_argument(); arg; arg = arg->next_argument()) {
+            length += arg->length();
+        }
+        out.write(length);
+        return true;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+} the_length_function
+  ("length", "length(string,...)"),
+  the_strlen_function
+  ("strlen", "strlen(string,...)");
 
 } // namespace t
 } // namespace texta

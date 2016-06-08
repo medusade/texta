@@ -116,7 +116,7 @@ protected:
     virtual void set_parameter(const function_parameter *to) {
         parameters_ = 0;
         if ((parameter_ = to)) {
-            while (to->name()) {
+            while ((to++)->name()) {
                 ++parameters_;
             }
         }

@@ -125,7 +125,7 @@ public:
                 TEXTA_LOG_ERROR("...unexpected 0 = new variable(name = " << name << ")");
             }
         } else {
-            TEXTA_LOG_MESSAGE_DEBUG("..." << pointer_to_string(v) << " = find_variable(name = \"" << name << "\")");
+            TEXTA_LOG_MESSAGE_DEBUG("..." << pointer_to_string(v) << "->chars() = " << chars_to_string(v->chars()) << " = find_variable(name = \"" << name << "\")");
         }
         return v;
     }
@@ -134,7 +134,7 @@ public:
         variable* v = 0;
         variable_branch* b = 0;
         if ((b = this->find(named))) {
-            v = &b->leaf();
+            v = &b->variable();
         }
         return v;
     }

@@ -21,20 +21,50 @@
 #ifndef _TEXTA_APP_CONSOLE_TEXTA_MAIN_HPP
 #define _TEXTA_APP_CONSOLE_TEXTA_MAIN_HPP
 
+#include "texta/console/main.hpp"
 #include "texta/t/processor.hpp"
 #include "texta/t/function_list.hpp"
 #include "texta/io/logger.hpp"
-#include "xos/base/getopt/main.hpp"
 #include "xos/base/avl/tree.hpp"
 #include "xos/base/binary/tree.hpp"
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPT "parameter"
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG_REQUIRED MAIN_OPT_ARGUMENT_REQUIRED
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG_RESULT 0
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG ""
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTUSE ""
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_S "p:"
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_C 'p'
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTION \
+   {TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPT, \
+    TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG_REQUIRED, \
+    TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG_RESULT, \
+    TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_C}, \
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_OPTIONS_CHARS \
+   TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_S \
+   TEXTA_CONSOLE_MAIN_OPTIONS_CHARS
+
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_OPTIONS_OPTIONS \
+   TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTION \
+   TEXTA_CONSOLE_MAIN_OPTIONS_OPTIONS
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_ARGS 0
+#define TEXTA_APP_CONSOLE_TEXTA_MAIN_ARGV
 
 namespace texta {
 namespace app {
 namespace console {
 namespace texta {
 
-typedef xos::base::getopt::main_implements main_implements;
-typedef xos::base::getopt::main main_extends;
+typedef ::texta::console::main_implements main_implements;
+typedef ::texta::console::main main_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: main
 ///////////////////////////////////////////////////////////////////////
@@ -67,6 +97,7 @@ protected:
     protected:
         main_extends& main_;
     };
+
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     class _EXPORT_CLASS input: public ::texta::t::input {
@@ -83,50 +114,119 @@ protected:
     protected:
         main_extends& main_;
     };
+
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual int run(int argc, char_t** argv, char_t** env) {
         int err = 0;
         ::texta::t::processor p;
         if ((p.init())) {
-            output out(*this);
-            input in(*this);
-            ssize_t count = 0;
-            count = p.expand(out, in);
+            if ((set_variables(p, parameters_))) {
+                output out(*this);
+                input in(*this);
+                ssize_t count = 0;
+                count = p.expand(out, in);
+            }
             p.fini();
         }
         return err;
     }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual int _run(int argc, char_t** argv, char_t** env) {
-        int err = 0;
-        const char* a2z = "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
-        xos::base::avl::branch b[26];
-        xos::base::avl::tree t;
-        size_t i, n;
-        for (i = (n = xos::base::chars_t::count(a2z)); i > 0; --i) {
-            xos::base::leaf& l = b[n-i].leaf();
-            xos::base::leaf::what_t& w = l.what();
-            w.assign(a2z + i - 1, 1);
-            t.insert(b[n-i]);
-        }
-        for (xos::base::avl::branch* b = t.first();  b; b = t.next(*b)) {
-            out(b->leaf().what().chars());
-        }
-        outln();
-        for (i = (n = xos::base::chars_t::count(a2z)); i > 0; --i) {
-            t.remove(b[n-i]);
-            for (xos::base::avl::branch* b = t.first();  b; b = t.next(*b)) {
-                out(b->leaf().what().chars());
+    virtual bool set_variables
+    (::texta::t::processor &p, ::texta::t::variable_list &l) {
+        ::texta::t::variable_item *i = 0;
+        bool success = true;
+        for (i = l.first(); i; i = i->next()) {
+            if (!(success = p.set_variable(i->what(), i->what().value()))) {
+                break;
             }
-            outln();
+        }
+        while ((i = l.pop())) {
+            delete &i->what();
+        }
+        return success;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual int on_parameter_option
+    (int optval, const char_t* optarg,
+     const char_t* optname, int optind,
+     int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        if ((optarg) && (optarg[0])) {
+            const char_t *found = 0;
+            TEXTA_LOG_MESSAGE_DEBUG("on_parameter_option(..., optarg = \"" << optarg << "\"...)...");
+            if ((found = chars_t::find(optarg, "="))
+                && (found > optarg) && (found[1])) {
+                string name(optarg, found - optarg), value(found + 1);
+                ::texta::t::variable *p = 0;
+                TEXTA_LOG_MESSAGE_DEBUG("...name = \"" << name << "\" value = \"" << value << "\" on_parameter_option(..., optarg = \"" << optarg << "\"...)");
+                if ((p = new ::texta::t::variable(name, value))) {
+                    parameters_.queue(p->item());
+                }
+            }
         }
         return err;
     }
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual int on_option
+    (int optval, const char_t* optarg,
+     const char_t* optname, int optind,
+     int argc, char_t**argv, char_t**env) {
+        int err = 0;
+        switch(optval) {
+        case TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_C:
+            err = on_parameter_option
+            (optval, optarg, optname, optind, argc, argv, env);
+            break;
+        default:
+            err = Extends::on_option
+            (optval, optarg, optname, optind, argc, argv, env);
+        }
+        return err;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual const char_t* option_usage
+    (const char_t*& optarg, const struct option* longopt) {
+        const char_t* chars = "";
+        switch(longopt->val) {
+        case TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTVAL_C:
+            optarg = TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTARG;
+            chars = TEXTA_APP_CONSOLE_TEXTA_MAIN_PARAMETER_OPTUSE;
+            break;
+        default:
+            chars = Extends::option_usage(optarg, longopt);
+        }
+        return chars;
+    }
+    ///////////////////////////////////////////////////////////////////////
+    virtual const char_t* options(const struct option*& longopts) {
+        int err = 0;
+        static const char_t* chars = TEXTA_APP_CONSOLE_TEXTA_MAIN_OPTIONS_CHARS;
+        static struct option optstruct[]= {
+            TEXTA_APP_CONSOLE_TEXTA_MAIN_OPTIONS_OPTIONS
+            {0, 0, 0, 0}};
+        longopts = optstruct;
+        return chars;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual const char_t* arguments(const char_t**& argv) {
+        static const char_t* _args = TEXTA_APP_CONSOLE_TEXTA_MAIN_ARGS;
+        static const char_t* _argv[] = {
+            TEXTA_APP_CONSOLE_TEXTA_MAIN_ARGV
+            0};
+        argv = _argv;
+        return _args;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+protected:
+    ::texta::t::variable_list parameters_;
 };
 
 } // namespace texta 

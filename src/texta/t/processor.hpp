@@ -540,6 +540,26 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    virtual function* find_function(const string& name) const {
+        return functions_.find_function(name);
+    }
+    virtual function* first_function() const {
+        function_branch *b = 0;
+        if ((b = functions_.first())) {
+            return &b->leaf();
+        }
+        return 0;
+    }
+    virtual function* next_function(function &f) const {
+        function_branch *b = 0;
+        if ((b = functions_.next(f.branch()))) {
+            return &b->leaf();
+        }
+        return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     virtual bool init() {
         bool success = true;
         if (!(init(function_list::the_list(), functions_))) {

@@ -85,7 +85,11 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual ssize_t write(const char* out, ssize_t length) {
-        this->append(out, length);
+        if (0 > (length)) {
+            this->append(out);
+        } else {
+            this->append(out, length);
+        }
         return length;
     }
     virtual ssize_t read(char* in, size_t size) {

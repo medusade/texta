@@ -32,8 +32,8 @@ namespace t {
 
 typedef value variable_value;
 typedef value_list variable_value_list;
-typedef implement_base variable_implements;
-typedef string variable_extends;
+typedef variable_leaf_implements variable_implements;
+typedef variable_leaf variable_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: variable
 ///////////////////////////////////////////////////////////////////////
@@ -44,12 +44,22 @@ public:
     typedef variable_extends Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    variable(const char* chars)
-    : Extends(chars), branch_(*this), item_(*this) {
+    variable(const char* name, const char* value)
+    : Extends(name, *this), branch_(*this), item_(*this) {
+        values_.push(value_.item());
+        set_value(value);
+    }
+    variable(const char* name)
+    : Extends(name, *this), branch_(*this), item_(*this) {
         values_.push(value_.item());
     }
-    variable(const string& copy)
-    : Extends(copy), branch_(*this), item_(*this) {
+    variable(const string& name, const string& value)
+    : Extends(name, *this), branch_(*this), item_(*this) {
+        values_.push(value_.item());
+        set_value(value);
+    }
+    variable(const string& name)
+    : Extends(name, *this), branch_(*this), item_(*this) {
         values_.push(value_.item());
     }
     variable(const variable& copy)
