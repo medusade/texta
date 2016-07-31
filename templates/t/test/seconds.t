@@ -1,2 +1,1 @@
-%until(%(%equal(1,%seconds()%)%)%,%(%time()%)%
-)%
+Hour = %hour()% Minute = %minute()% Seconds = %second()%
