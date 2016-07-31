@@ -118,6 +118,7 @@ protected:
         if ((chars = template_file_.has_chars())) {
             if ((in.open(chars))) {
                 if ((p.init())) {
+                    p.set_variable(input_name_, template_file_);
                     set_variables_from_form(p);
                     if ((chars = param_content_type(length))) {
                         this->set_content_type(chars);

@@ -76,7 +76,7 @@ public:
      const char *val, size_t val_length, const char *delim, size_t delim_length,
      function_argument *before, function_argument *between, function_argument *after,
      function_argument *expr, function_argument *var) const {
-        if (val_length > delim_length) {
+        if (val_length) {
             const char *chars = val, *found = 0;
             TEXTA_LOG_MESSAGE_DEBUG("chars_t::find(\"" << chars << "\", \"" << delim << "\")...");
             if ((found = chars_t::find(chars, delim))) {
@@ -101,6 +101,10 @@ public:
                         }
                     }
                 } while (found);
+            } else {
+                expand
+                (out, p, chars, val_length,
+                 before, after, expr, var);
             }
         }
         return true;
@@ -111,7 +115,8 @@ public:
      function_argument *before, function_argument *after,
      function_argument *expr, function_argument *var) const {
         if ((before)) {
-            out.write(before->chars());
+            p.expand(out, *before);
+            before->seek(0);
         }
         if ((expr)) {
             if ((var)) {
@@ -127,7 +132,8 @@ public:
             out.write(chars, length);
         }
         if ((after)) {
-            out.write(after->chars());
+            p.expand(out, *after);
+            after->seek(0);
         }
         return true;
     }
@@ -160,7 +166,7 @@ public:
      const char *val, size_t val_length, const char *delim, size_t delim_length,
      function_argument *before, function_argument *between, function_argument *after,
      function_argument *expr, function_argument *var) const {
-        if (val_length > delim_length) {
+        if (val_length) {
             const char *chars = val, *begin = chars, *end = chars + val_length, *found = 0;
             TEXTA_LOG_MESSAGE_DEBUG("chars_t::find_reverse(\"" << chars << "\", \"" << delim << "\", 0, " << delim_length << ", " << (end - chars) << ")...");
             if ((found = chars_t::find_reverse(chars, delim))) {
@@ -187,6 +193,10 @@ public:
                         }
                     }
                 } while (found);
+            } else {
+                expand
+                (out, p, chars, val_length,
+                 before, after, expr, var);
             }
         }
         return true;
@@ -197,6 +207,131 @@ public:
   ("reverse-parse", "reverse-parse(string,delim[,(before)[,(between)[,[(after),](expr),var]]])"),
   the_rparse_function
   ("rparse", "rparse(string,delim[,(before)[,(between)[,[(after),](expr),var]]])");
+
+  ///////////////////////////////////////////////////////////////////////
+  ///  Class: parseln_function
+  ///////////////////////////////////////////////////////////////////////
+  class _EXPORT_CLASS parseln_function: public parse_function {
+  public:
+      typedef parse_function Extends;
+      typedef parseln_function Derives;
+      ///////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////
+      parseln_function(const char *name, const char *description)
+      : Extends(name, description) {
+          static function_parameter parameter[]
+          = {{0,0}};
+          set_parameter(parameter);
+      }
+      ///////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////
+      using Extends::expand;
+      virtual bool expand
+      (output &out, processor &p,
+       const function_argument_list &args) const {
+          function_argument
+              *val = 0,
+              *before = 0, *between = 0, *after = 0,
+              *expr = 0, *var = 0;
+
+          if ((val = args.first_argument()) && (0 < val->length())) {
+              if ((before = val->next_argument())) {
+                  if ((between = before->next_argument())) {
+                      if ((after = between->next_argument())) {
+                          if ((expr = after->next_argument())) {
+                              if ((var = expr->next_argument())) {
+                                  if (1 > (var->length())) var = 0;
+                              }
+                              if (1 > (expr->length())) expr = 0;
+                          }
+                          if (1 > (after->length())) after = 0;
+                      }
+                      if (1 > (between->length())) between = 0;
+                  }
+                  if (1 > (before->length())) before = 0;
+              }
+              expand
+              (out, p, val->chars(), val->length(),
+               before, between, after, expr, var);
+          }
+          return true;
+      }
+      virtual bool expand
+      (output &out, processor &p,
+       const char *val, size_t val_length,
+       function_argument *before, function_argument *between, function_argument *after,
+       function_argument *expr, function_argument *var) const {
+          if (val_length) {
+              size_t begin = 0; on_t on = on_char;
+              const char *chars = val, *found = 0;
+              TEXTA_LOG_MESSAGE_DEBUG("find(\"" << chars << "\")...");
+              if ((found = find(chars, begin, on))) {
+                  TEXTA_LOG_MESSAGE_DEBUG("..." << chars_to_string(chars, found - chars) << " = find(\"" << chars << "\")");
+                  do {
+                      chars += begin;
+                      expand
+                      (out, p, chars, found - chars,
+                       before, after, expr, var);
+                      if ((between)) {
+                          out.write(between->chars());
+                      }
+                      chars = (found + 1);
+                      TEXTA_LOG_MESSAGE_DEBUG("find(\"" << chars << "\")...");
+                      if ((found = find(chars, begin, on))) {
+                          TEXTA_LOG_MESSAGE_DEBUG("..." << chars_to_string(chars, found - chars) << " = find(\"" << chars << "\")");
+                      } else {
+                          if (val_length > (chars - val)) {
+                              expand
+                              (out, p, chars,
+                               val_length - (chars - val),
+                               before, after, expr, var);
+                          }
+                      }
+                  } while (found);
+              } else {
+                  expand
+                  (out, p, chars, val_length,
+                   before, after, expr, var);
+              }
+          }
+          return true;
+      }
+      ///////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////
+      enum on_t { on_char, on_cr, on_lf };
+      virtual const char* find(const char* chars, size_t& begin, on_t& on) const {
+          begin = 0;
+          for (char c = *chars; c; c = *++chars) {
+              switch(c) {
+              case '\r':
+                  on = on_cr;
+                  return chars;
+                  break;
+              case '\n':
+                  switch(on) {
+                  case on_cr: // '\r''\n'
+                      begin = 1;
+                      on = on_char;
+                      break;
+                  default:
+                      on = on_lf;
+                      return chars;
+                      break;
+                  }
+                  break;
+              default:
+                  on = on_char;
+                  break;
+              }
+          }
+          return 0;
+      }
+      ///////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////
+  } the_parseln_function
+    ("parseln", "parse(string,[,(before)[,(between)[,[(after),](expr),var]]])"),
+    the_lparseln_function
+    ("lparseln", "lparse(string,[,(before)[,(between)[,[(after),](expr),var]]])");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: left_function
