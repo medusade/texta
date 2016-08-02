@@ -35,6 +35,10 @@
 %input_extension,%(%else-then(%input_extension%,%(%input_extension%)%)%)%,%
 %INPUT_EXTENSION,%(%else-then(%INPUT_EXTENSION%,%(%toupper(%input_extension%)%)%)%)%,%
 %input_extension,%(%else-then(%_input_extension%,%(%tolower(%input_extension%)%)%)%)%,%
+%include_path,%(%else-then(%include_path%,%(%Input_path%)%)%)%,%
+%Include_path,%(%else-then(%Include_path%,%(%include_path%)%)%)%,%
+%INCLUDE_PATH,%(%else-then(%INCLUDE_PATH%,%(%toupper(%Include_path%)%)%)%)%,%
+%include_path,%(%else-then(%_Include_path%,%(%tolower(%Include_path%)%)%)%)%,%
 %lcomment,%(%else-then(%lcomment%,%(%%#)%)%)%,%
 %LComment,%(%else-then(%LComment%,%(%lcomment%)%)%)%,%
 %LCOMMENT,%(%else-then(%LCOMMENT%,%(%toupper(%LComment%)%)%)%)%,%
@@ -76,9 +80,9 @@
 %ORGANIZATION,%(%else-then(%ORGANIZATION%,%(%toupper(%Organization%)%)%)%)%,%
 %organization,%(%else-then(%_Organization%,%(%tolower(%Organization%)%)%)%)%,%
 %%(%BComment%
-%LComment% %include(%Input_path%/%Copyright%)%
+%LComment% %include(%Include_path%/%Copyright%)%
 %LComment%
-%parseln(%include(%Input_path%/%Disclaimer%)%,%(%LComment% )%,%(
+%parseln(%include(%Include_path%/%Disclaimer%)%,%(%LComment% )%,%(
 )%,,%(%dl%)%,dl)%
 %LComment%
 %LComment%   File: %File%
