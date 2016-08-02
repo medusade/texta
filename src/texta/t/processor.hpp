@@ -63,16 +63,19 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand(output& out, input& in) {
         bool success = true;
-        size_t depth = depth_;
         size_t count = 0;
         char c = 0;
 
         if (0 > (count = in.read(&c, 1))) {
             return false;
+        } else {
+            if (0 < (count)) {
+                size_t depth = depth_;
+                depth_ = 0;
+                success = expand(c, out, in, c);
+                depth_ = depth;
+            }
         }
-        depth_ = 0;
-        success = expand(c, out, in, c);
-        depth_ = depth;
         return success;
     }
 

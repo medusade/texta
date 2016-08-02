@@ -48,7 +48,9 @@ public:
     ///////////////////////////////////////////////////////////////////////
     using Implements::write;
     virtual ssize_t write(const string& out) {
-        ssize_t count = this->write(out.chars(), out.length());
+        const char* chars = out.chars();
+        size_t length = out.length();
+        ssize_t count = this->write(chars, length);
         return count;
     }
     ///////////////////////////////////////////////////////////////////////
@@ -86,7 +88,9 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual ssize_t write(const char* out, ssize_t length) {
         if (0 > (length)) {
+            length = this->length();
             this->append(out);
+            length = this->length() - length;
         } else {
             this->append(out, length);
         }
