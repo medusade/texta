@@ -34,8 +34,8 @@ include $(PKG)/$(PRJ)/Makedefines
 #$(PKG)/$(PRJ)/somedir \
 #
 SRC_DIRS = \
-$(PKG)/$(PRJ)/app/talas \
-$(PKG)/$(PRJ)/app/openssl \
+$(PKG)/$(PRJ)/app/texta \
+$(PKG)/$(PRJ)/app/texta_cgi \
 
 include $(PKG)/$(PRJ)/Makedirs
 

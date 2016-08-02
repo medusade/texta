@@ -23,7 +23,7 @@ include(../../texta.pri)
 include(../../../../QtCreator/app/texta_cgi.pri)
 include(../../../../QtCreator/app/texta_functions.pri)
 
-TARGET = texta_cgi
+TARGET = texta-cgi
 
 INCLUDEPATH += \
 $${texta_cgi_INCLUDEPATH} \
