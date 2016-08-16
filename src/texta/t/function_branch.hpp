@@ -52,7 +52,7 @@ public:
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual int compare(const leaf_t& to) const {
+    virtual int compare(const leaf_t to) const {
         int unequal = this->leaf().compare(to);
         return unequal;
     }

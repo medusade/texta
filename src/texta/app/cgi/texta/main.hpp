@@ -106,7 +106,7 @@ protected:
              B_, "missing template source (", NULL_POINTER);
             if ((names = param_template_file_names()) && (chars = *names)) {
                 do {
-                    this->outl("\"", _B, chars, B_, "\"");
+                    this->outl("\"", _B, chars, B_, "\"", NULL_POINTER);
                     if ((chars = *(++names))) {
                         this->out(" or ");
                     }
