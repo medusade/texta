@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 1988-2014 $organization$
+# Copyright (c) 1988-2016 $organization$
 #
 # This software is provided by the author and contributors ``as is''
 # and any express or implied warranties, including, but not limited to,
@@ -13,28 +13,32 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: Makefile
+#   File: texta_cgi.pro
 #
 # Author: $author$
-#   Date: 11/22/2014
-#
-# MacOSX Gcc Makefile for texta
+#   Date: 6/4/2016
 ########################################################################
-PKG = ../../../..
+include(../../../../QtCreator/texta.pri)
+include(../../texta.pri)
+include(../../../../QtCreator/app/texta_cgi.pri)
+include(../../../../QtCreator/app/texta_functions.pri)
 
-PRJ = projects/macosx/Makefile/Gcc
-SRC = src
+TARGET = texta-cgi
 
-include $(PKG)/$(PRJ)/Makedefines
+INCLUDEPATH += \
+$${texta_cgi_INCLUDEPATH} \
 
-#
-# Source subdirs
-#
-#SRC_DIRS = \
-#$(PKG)/$(PRJ)/somedir \
-#
-SRC_DIRS = \
-$(PKG)/$(PRJ)/lib \
-$(PKG)/$(PRJ)/app \
+DEFINES += \
+$${texta_cgi_DEFINES} \
 
-include $(PKG)/$(PRJ)/Makedirs
+########################################################################
+HEADERS += \
+$${texta_cgi_HEADERS} \
+
+SOURCES += \
+$${texta_cgi_SOURCES} \
+$${texta_SOURCES} \
+
+########################################################################
+LIBS += \
+$${texta_cgi_LIBS} \

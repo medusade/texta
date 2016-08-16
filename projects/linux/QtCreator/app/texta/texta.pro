@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 1988-2014 $organization$
+# Copyright (c) 1988-2016 $organization$
 #
 # This software is provided by the author and contributors ``as is''
 # and any express or implied warranties, including, but not limited to,
@@ -13,28 +13,29 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: Makefile
+#   File: texta.pro
 #
 # Author: $author$
-#   Date: 11/22/2014
-#
-# MacOSX Gcc Makefile for texta
+#   Date: 3/18/2016
 ########################################################################
-PKG = ../../../..
+include(../../../../QtCreator/texta.pri)
+include(../../../../QtCreator/app/texta.pri)
+include(../../../../QtCreator/app/texta_functions.pri)
+include(../../texta.pri)
 
-PRJ = projects/macosx/Makefile/Gcc
-SRC = src
+TARGET = texta
 
-include $(PKG)/$(PRJ)/Makedefines
+INCLUDEPATH += \
+$${texta_INCLUDEPATH} \
 
-#
-# Source subdirs
-#
-#SRC_DIRS = \
-#$(PKG)/$(PRJ)/somedir \
-#
-SRC_DIRS = \
-$(PKG)/$(PRJ)/lib \
-$(PKG)/$(PRJ)/app \
+DEFINES += \
+$${texta_DEFINES} \
 
-include $(PKG)/$(PRJ)/Makedirs
+HEADERS += \
+$${texta_HEADERS} \
+
+SOURCES += \
+$${texta_SOURCES} \
+
+LIBS += \
+$${texta_LIBS} \

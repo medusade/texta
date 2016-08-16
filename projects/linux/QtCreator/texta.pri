@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 1988-2014 $organization$
+# Copyright (c) 1988-2016 $organization$
 #
 # This software is provided by the author and contributors ``as is''
 # and any express or implied warranties, including, but not limited to,
@@ -13,28 +13,29 @@
 # or otherwise) arising in any way out of the use of this software,
 # even if advised of the possibility of such damage.
 #
-#   File: Makefile
+#   File: texta.pri
 #
 # Author: $author$
-#   Date: 11/22/2014
-#
-# MacOSX Gcc Makefile for texta
+#   Date: 3/18/2016
 ########################################################################
-PKG = ../../../..
 
-PRJ = projects/macosx/Makefile/Gcc
-SRC = src
+TEXTA_OS = linux
 
-include $(PKG)/$(PRJ)/Makedefines
+########################################################################
+# nadir
+NADIR_BLD = ../$${NADIR_PKG}/build/$${TEXTA_OS}/QtCreator/$${TEXTA_CONFIG}
+NADIR_LIB = $${NADIR_BLD}/lib
 
-#
-# Source subdirs
-#
-#SRC_DIRS = \
-#$(PKG)/$(PRJ)/somedir \
-#
-SRC_DIRS = \
-$(PKG)/$(PRJ)/lib \
-$(PKG)/$(PRJ)/app \
+########################################################################
+# texta
+texta_INCLUDEPATH += \
 
-include $(PKG)/$(PRJ)/Makedirs
+texta_DEFINES += \
+
+texta_LIBS += \
+-L$${NADIR_LIB}/libxosnadir \
+-lxosnadir \
+-lpthread \
+-ldl \
+-lrt \
+

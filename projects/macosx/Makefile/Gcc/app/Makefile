@@ -18,7 +18,7 @@
 # Author: $author$
 #   Date: 5/24/2015
 #
-# MacOSX Gcc Makefile for talas applications
+# MacOSX Gcc Makefile for texta applications
 ########################################################################
 PKG = ../../../../..
 

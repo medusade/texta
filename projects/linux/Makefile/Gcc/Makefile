@@ -16,13 +16,13 @@
 #   File: Makefile
 #
 # Author: $author$
-#   Date: 11/22/2014
+#   Date: 12/9/2014
 #
-# MacOSX Gcc Makefile for texta
+# Linux Gcc Makefile
 ########################################################################
 PKG = ../../../..
 
-PRJ = projects/macosx/Makefile/Gcc
+PRJ = projects/linux/Makefile/Gcc
 SRC = src
 
 include $(PKG)/$(PRJ)/Makedefines
@@ -38,3 +38,4 @@ $(PKG)/$(PRJ)/lib \
 $(PKG)/$(PRJ)/app \
 
 include $(PKG)/$(PRJ)/Makedirs
+
