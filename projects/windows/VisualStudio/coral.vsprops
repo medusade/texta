@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!--========================================================================-->
+<!-- Copyright (c) 1988-2016 $organization$                                 -->
+<!--                                                                        -->
+<!-- This software is provided by the author and contributors ``as is''     -->
+<!-- and any express or implied warranties, including, but not limited to,  -->
+<!-- the implied warranties of merchantability and fitness for a particular -->
+<!-- purpose are disclaimed. In no event shall the author or contributors   -->
+<!-- be liable for any direct, indirect, incidental, special, exemplary,    -->
+<!-- or consequential damages (including, but not limited to, procurement   -->
+<!-- of substitute goods or services; loss of use, data, or profits; or     -->
+<!-- business interruption) however caused and on any theory of liability,  -->
+<!-- whether in contract, strict liability, or tort (including negligence   -->
+<!-- or otherwise) arising in any way out of the use of this software,      -->
+<!-- even if advised of the possibility of such damage.                     -->
+<!--                                                                        -->
+<!--   File: coral.vsprops                                                  -->
+<!--                                                                        -->
+<!-- Author: $author$                                                       -->
+<!--   Date: 10/20/2016                                                      -->
+<!--========================================================================-->
+<VisualStudioPropertySheet
+    ProjectType="Visual C++"
+    Version="8.00"
+    Name="coral">
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="CORAL_GROUP"
+      Value=""
+    />
+  <UserMacro
+      Name="CORAL_NAME"
+      Value="coral"
+    />
+  <UserMacro
+      Name="CORAL_VERSION"
+      Value=""
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="CORAL_DIR"
+      Value="$(CORAL_GROUP)$(CORAL_NAME)$(CORAL_VERSION)"
+    />
+  <UserMacro
+      Name="CORAL_SOURCE_DIR"
+      Value="$(SOURCE_ROOT_DIR)/$(CORAL_DIR)/src"
+    />
+  <UserMacro
+      Name="CORAL_BUILD_DIR"
+      Value="$(SOURCE_BUILD_DIR)/$(CORAL_DIR)/build"
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="CORAL_BUILD"
+      Value="$(CORAL_BUILD_DIR)/$(PlatformName)/$(VCVersion)/$(ConfigurationName)"
+    />
+  <UserMacro
+      Name="CORAL_OBJ"
+      Value="$(CORAL_BUILD)/obj/$(ProjectName)"
+    />
+  <UserMacro
+      Name="CORAL_LIB"
+      Value="$(CORAL_BUILD)/lib"
+    />
+  <UserMacro
+      Name="CORAL_BIN"
+      Value="$(CORAL_BUILD)/bin"
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="CORAL_DEFINES"
+      Value=""
+    />
+  <UserMacro
+      Name="CORAL_INCLUDE_DIRS"
+      Value="$(CORAL_SOURCE_DIR)"
+    />
+  <UserMacro
+      Name="CORAL_LIB_DIRS"
+      Value="$(CORAL_LIB)"
+    />
+  <UserMacro
+      Name="CORAL_LIBS"
+      Value="libcoral.lib"
+    />
+
+  <!--===============================================-->
+
+</VisualStudioPropertySheet>

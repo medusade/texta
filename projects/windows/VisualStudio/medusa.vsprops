@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!--========================================================================-->
+<!-- Copyright (c) 1988-2016 $organization$                                 -->
+<!--                                                                        -->
+<!-- This software is provided by the author and contributors ``as is''     -->
+<!-- and any express or implied warranties, including, but not limited to,  -->
+<!-- the implied warranties of merchantability and fitness for a particular -->
+<!-- purpose are disclaimed. In no event shall the author or contributors   -->
+<!-- be liable for any direct, indirect, incidental, special, exemplary,    -->
+<!-- or consequential damages (including, but not limited to, procurement   -->
+<!-- of substitute goods or services; loss of use, data, or profits; or     -->
+<!-- business interruption) however caused and on any theory of liability,  -->
+<!-- whether in contract, strict liability, or tort (including negligence   -->
+<!-- or otherwise) arising in any way out of the use of this software,      -->
+<!-- even if advised of the possibility of such damage.                     -->
+<!--                                                                        -->
+<!--   File: medusa.vsprops                                                  -->
+<!--                                                                        -->
+<!-- Author: $author$                                                       -->
+<!--   Date: 10/20/2016                                                      -->
+<!--========================================================================-->
+<VisualStudioPropertySheet
+    ProjectType="Visual C++"
+    Version="8.00"
+    Name="medusa">
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="MEDUSA_GROUP"
+      Value=""
+    />
+  <UserMacro
+      Name="MEDUSA_NAME"
+      Value="medusa"
+    />
+  <UserMacro
+      Name="MEDUSA_VERSION"
+      Value=""
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="MEDUSA_DIR"
+      Value="$(MEDUSA_GROUP)$(MEDUSA_NAME)$(MEDUSA_VERSION)"
+    />
+  <UserMacro
+      Name="MEDUSA_SOURCE_DIR"
+      Value="$(SOURCE_ROOT_DIR)/$(MEDUSA_DIR)/src"
+    />
+  <UserMacro
+      Name="MEDUSA_BUILD_DIR"
+      Value="$(SOURCE_BUILD_DIR)/$(MEDUSA_DIR)/build"
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="MEDUSA_BUILD"
+      Value="$(MEDUSA_BUILD_DIR)/$(PlatformName)/$(VCVersion)/$(ConfigurationName)"
+    />
+  <UserMacro
+      Name="MEDUSA_OBJ"
+      Value="$(MEDUSA_BUILD)/obj/$(ProjectName)"
+    />
+  <UserMacro
+      Name="MEDUSA_LIB"
+      Value="$(MEDUSA_BUILD)/lib"
+    />
+  <UserMacro
+      Name="MEDUSA_BIN"
+      Value="$(MEDUSA_BUILD)/bin"
+    />
+
+  <!--===============================================-->
+
+  <UserMacro
+      Name="MEDUSA_DEFINES"
+      Value=""
+    />
+  <UserMacro
+      Name="MEDUSA_INCLUDE_DIRS"
+      Value="$(MEDUSA_SOURCE_DIR)"
+    />
+  <UserMacro
+      Name="MEDUSA_LIB_DIRS"
+      Value="$(MEDUSA_LIB)"
+    />
+  <UserMacro
+      Name="MEDUSA_LIBS"
+      Value="libmedusa.lib"
+    />
+
+  <!--===============================================-->
+
+</VisualStudioPropertySheet>
