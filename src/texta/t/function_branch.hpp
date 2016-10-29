@@ -28,7 +28,8 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS function_branch;
-typedef function& function_leaf;
+//typedef function& function_leaf;
+typedef function_reference function_leaf;
 typedef xos::base::avl::branch_implements function_branch_implements;
 typedef xos::base::avl::brancht
 <function_leaf, function_branch, function_branch_implements,
@@ -52,7 +53,7 @@ public:
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    virtual int compare(const leaf_t to) const {
+    virtual int compare(const leaf_t& to) const {
         int unequal = this->leaf().compare(to);
         return unequal;
     }

@@ -88,7 +88,8 @@ public:
         function_argument* arg = 0;
         function_argument_item* item = 0;
         if ((item = this->item().next())) {
-            arg = &item->what();
+            //arg = &item->what();
+            arg = &((function_argument&)(item->what()));
         }
         return arg;
     }

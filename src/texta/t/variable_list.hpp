@@ -47,7 +47,8 @@ public:
         variable* v = 0;
         variable_item* i = 0;
         if ((i = this->pop())) {
-            v = &i->what();
+            //v = &i->what();
+            v = &((variable&)(i->what()));
         }
         return v;
     }

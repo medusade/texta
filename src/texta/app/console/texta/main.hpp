@@ -136,12 +136,15 @@ protected:
         ::texta::t::variable_item *i = 0;
         bool success = true;
         for (i = l.first(); i; i = i->next()) {
-            if (!(success = p.set_variable(i->what(), i->what().value()))) {
+            //if (!(success = p.set_variable(i->what(), i->what().value()))) {
+            ::texta::t::variable& v = ((::texta::t::variable&)(i->what()));
+            if (!(success = p.set_variable(v, v.value()))) {
                 break;
             }
         }
         while ((i = l.pop())) {
-            delete &i->what();
+            //delete &i->what();
+            delete &((::texta::t::variable&)(i->what()));
         }
         return success;
     }

@@ -27,9 +27,37 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS function_argument;
+typedef implement_base function_argument_reference_implements;
+typedef base function_argument_reference_extends;
+///////////////////////////////////////////////////////////////////////
+///  Class: function_argument_reference
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS function_argument_reference
+: virtual public function_argument_reference_implements,
+  public function_argument_reference_extends {
+public:
+    typedef function_argument_reference_implements Implements;
+    typedef function_argument_reference_extends Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    function_argument_reference(function_argument& a): a_(a) {
+    }
+    function_argument_reference
+    (const function_argument_reference& copy): a_(copy.a_) {
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    operator function_argument& () const { return (function_argument&)a_; }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+protected:
+    function_argument& a_;
+};
 class _EXPORT_CLASS function_argument_item;
+//typedef xos::base::itemt
+//<function_argument&, function_argument_item> function_argument_item_extends;
 typedef xos::base::itemt
-<function_argument&, function_argument_item> function_argument_item_extends;
+<function_argument_reference, function_argument_item> function_argument_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_argument_item
 ///////////////////////////////////////////////////////////////////////

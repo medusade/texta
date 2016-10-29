@@ -50,7 +50,8 @@ public:
         function_argument* arg = 0;
         function_argument_item* item = 0;
         if ((item = this->first())) {
-            arg = &item->what();
+            //arg = &item->what();
+            arg = &((function_argument&)(item->what()));
         }
         return arg;
     }
@@ -59,7 +60,8 @@ public:
     virtual void clear() {
         function_argument_item* i = 0;
         while (i = this->pop()) {
-            function_argument* a = &i->what();
+            //function_argument* a = &i->what();
+            function_argument* a = &((function_argument&)(i->what()));
             TEXTA_LOG_MESSAGE_DEBUG("delete a = " << pointer_to_string(a) << "->chars() = " << chars_to_string(a->chars()) << "...");
             delete a;
             TEXTA_LOG_MESSAGE_DEBUG("...delete a = " << pointer_to_string(a) << "");

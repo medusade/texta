@@ -68,7 +68,8 @@ public:
     }
     virtual ~variable() {
         for (value_item* i = values_.pop(); i; i = values_.pop()) {
-            variable_value* v = &i->what();
+            //variable_value* v = &i->what();
+            variable_value* v = &((variable_value&)(i->what()));
             if (&value_ != v) {
                 TEXTA_LOG_MESSAGE_DEBUG("delete v = " << pointer_to_string(v) << "->chars() = " << chars_to_string(v->chars()) << "...");
                 delete v;
@@ -95,7 +96,8 @@ public:
     virtual bool pop_value() {
         value_item* i = 0;
         if ((i = values_.first())) {
-            variable_value* v = &i->what();
+            //variable_value* v = &i->what();
+            variable_value* v = &((variable_value&)(i->what()));
             if (&value_ != v) {
                 TEXTA_LOG_MESSAGE_DEBUG("values_.pop()...");
                 values_.pop();

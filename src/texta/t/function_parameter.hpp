@@ -46,9 +46,38 @@ public:
     const char *name_, *description_;
 };
 
+typedef implement_base function_parameter_reference_implements;
+typedef base function_parameter_reference_extends;
+///////////////////////////////////////////////////////////////////////
+///  Class: function_parameter_reference
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS function_parameter_reference
+: virtual public function_parameter_reference_implements,
+  public function_parameter_reference_extends {
+public:
+    typedef function_parameter_reference_implements Implements;
+    typedef function_parameter_reference_extends Extends;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    function_parameter_reference(function_parameter& p): p_(p) {
+    }
+    function_parameter_reference
+    (const function_parameter_reference& copy): p_(copy.p_) {
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    operator function_parameter& () const { return (function_parameter&)p_; }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+protected:
+    function_parameter& p_;
+};
+
 class _EXPORT_CLASS function_parameter_item;
+//typedef xos::base::itemt
+//<function_parameter&, function_parameter_item> function_parameter_item_extends;
 typedef xos::base::itemt
-<function_parameter&, function_parameter_item> function_parameter_item_extends;
+<function_parameter_reference, function_parameter_item> function_parameter_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_parameter_item
 ///////////////////////////////////////////////////////////////////////
