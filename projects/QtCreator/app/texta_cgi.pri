@@ -26,15 +26,6 @@ texta_cgi_DEFINES += \
 $${texta_DEFINES} \
 
 ########################################################################
-# texta_cgi
-texta_cgi_HEADERS += \
-$${TEXTA_SRC}/texta/app/cgi/texta/main.hpp \
-$${TEXTA_SRC}/texta/inet/cgi/main.hpp \
-
-texta_cgi_SOURCES += \
-$${TEXTA_SRC}/texta/app/cgi/texta/main.cpp \
-
-########################################################################
 # coral
 texta_cgi_HEADERS += \
 $${CORAL_SRC}/coral/app/cgi/main.hpp \
@@ -42,7 +33,27 @@ $${CORAL_SRC}/coral/console/main.hpp \
 $${CORAL_SRC}/coral/console/main_main.hpp \
 
 texta_cgi_SOURCES += \
-$${CORAL_SRC}/coral/console/main_main.cpp \
+
+########################################################################
+texta_cgi_HEADERS += \
+$${TEXTA_SRC}/texta/inet/cgi/main.hpp \
+$${TEXTA_SRC}/texta/inet/cgi/main_main.hpp \
+$${TEXTA_SRC}/texta/base/cgi_main.hpp \
+$${TEXTA_SRC}/texta/base/cgi_main_main.hpp \
+$${TEXTA_SRC}/texta/coral/inet/cgi/main.hpp \
+$${TEXTA_SRC}/texta/coral/inet/cgi/main_main.hpp \
+
+texta_cgi_SOURCES += \
+$${TEXTA_SRC}/texta/inet/cgi/main_main.cpp \
+
+########################################################################
+texta_cgi_HEADERS += \
+$${TEXTA_SRC}/texta/app/cgi/texta/main.hpp \
+$${TEXTA_SRC}/texta/xos/base/base.hpp \
+
+texta_cgi_SOURCES += \
+$${TEXTA_SRC}/texta/app/cgi/texta/main.cpp \
+$${TEXTA_SRC}/texta/xos/base/base.cpp \
 
 ########################################################################
 texta_cgi_LIBS += \

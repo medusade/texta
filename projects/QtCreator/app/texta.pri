@@ -61,6 +61,22 @@ $${NADIR_SRC}/xos/base/binary/branch.cpp \
 ########################################################################
 # texta
 texta_HEADERS += \
+$${TEXTA_SRC}/texta/xos/base/main_main.hpp \
+$${TEXTA_SRC}/texta/xos/base/main.hpp \
+$${TEXTA_SRC}/texta/xos/base/logger.hpp \
+$${TEXTA_SRC}/texta/xos/base/base.hpp \
+
+texta_SOURCES += \
+
+_texta_HEADERS += \
+$${TEXTA_SRC}/texta/xos/base/main_main.cpp \
+$${TEXTA_SRC}/texta/xos/base/main.cpp \
+$${TEXTA_SRC}/texta/xos/base/logger.cpp \
+$${TEXTA_SRC}/texta/xos/base/base.cpp \
+
+########################################################################
+# texta
+texta_HEADERS += \
 $${TEXTA_SRC}/texta/app/console/texta/main.hpp \
 $${TEXTA_SRC}/texta/console/main.hpp \
 $${TEXTA_SRC}/texta/console/main_main.hpp \
@@ -92,6 +108,9 @@ $${TEXTA_SRC}/texta/io/logger.hpp \
 $${TEXTA_SRC}/texta/io/writer.hpp \
 $${TEXTA_SRC}/texta/io/reader.hpp \
 $${TEXTA_SRC}/texta/base/base.hpp \
+$${TEXTA_SRC}/texta/base/logger.hpp \
+$${TEXTA_SRC}/texta/base/main.hpp \
+$${TEXTA_SRC}/texta/base/main_main.hpp \
 
 texta_SOURCES += \
 $${TEXTA_SRC}/texta/app/console/texta/main.cpp \
@@ -122,21 +141,6 @@ $${TEXTA_SRC}/texta/t/t.cpp \
 $${TEXTA_SRC}/texta/io/logger.cpp \
 $${TEXTA_SRC}/texta/io/writer.cpp \
 $${TEXTA_SRC}/texta/io/reader.cpp \
-$${TEXTA_SRC}/texta/base/base.cpp \
-
-########################################################################
-# xos
-texta_HEADERS += \
-$${NADIR_SRC}/xos/base/getopt/main_opt.hpp \
-$${NADIR_SRC}/xos/base/getopt/main.hpp \
-$${NADIR_SRC}/xos/base/main.hpp \
-$${NADIR_SRC}/xos/base/main_main.hpp \
-
-texta_SOURCES += \
-
-_texta_SOURCES += \
-$${NADIR_SRC}/xos/base/main_main.cpp \
-$${NADIR_SRC}/xos/base/getopt/main_opt.cpp \
 
 ########################################################################
 texta_LIBS += \
