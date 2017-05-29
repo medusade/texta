@@ -54,15 +54,29 @@ public:
                     if ((after = between->next_argument())) {
                         if ((expr = after->next_argument())) {
                             if ((var = expr->next_argument())) {
+                                // parse(val,delim,before,between,after,expr,var)
                                 if (1 > (var->length())) var = 0;
+                            } else {
+                                // parse(val,delim,before,between,expr,var)
+                                var = expr;
+                                expr = after;
+                                after = 0;
                             }
-                            if (1 > (expr->length())) expr = 0;
+                            if ((expr) && (1 > (expr->length()))) expr = 0;
+                        } else {
+                            // parse(val,delim,before,between,after)
                         }
-                        if (1 > (after->length())) after = 0;
+                        if ((after) && (1 > (after->length()))) after = 0;
+                    } else {
+                        // parse(val,delim,before,between)
                     }
-                    if (1 > (between->length())) between = 0;
+                    if ((between) && (1 > (between->length()))) between = 0;
+                } else {
+                    // parse(val,delim,before)
                 }
-                if (1 > (before->length())) before = 0;
+                if ((before) && (1 > (before->length()))) before = 0;
+            } else {
+                // parse(val,delim)
             }
             expand
             (out, p, val->chars(), val->length(),
@@ -85,13 +99,16 @@ public:
                     expand
                     (out, p, chars, found - chars,
                      before, after, expr, var);
-                    if ((between)) {
+                    /*if ((between)) {
                         out.write(between->chars());
-                    }
+                    }*/
                     chars = (found + delim_length);
                     TEXTA_LOG_MESSAGE_DEBUG("chars_t::find(\"" << chars << "\", \"" << delim << "\")...");
                     if ((found = chars_t::find(chars, delim))) {
                         TEXTA_LOG_MESSAGE_DEBUG("..." << chars_to_string(chars, found - chars) << " = chars_t::find(\"" << chars << "\", \"" << delim << "\")");
+                        if ((between)) {
+                            out.write(between->chars());
+                        }
                     } else {
                         if (val_length > (chars - val)) {
                             expand

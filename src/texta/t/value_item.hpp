@@ -53,8 +53,7 @@ protected:
 };
 
 class _EXPORT_CLASS value_item;
-//typedef xos::base::itemt<value&, value_item> value_item_extends;
-typedef xos::base::itemt<value_reference, value_item> value_item_extends;
+typedef itemt<value_reference, value_item> value_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: value_item
 ///////////////////////////////////////////////////////////////////////

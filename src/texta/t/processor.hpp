@@ -38,8 +38,31 @@
 namespace texta {
 namespace t {
 
-typedef xos::base::implement_base processor_implements;
-typedef xos::base::base processor_extends;
+class _EXPORT_CLASS processor;
+typedef texta::implement_base processor_observer_implements;
+///////////////////////////////////////////////////////////////////////
+///  Class: processor_observer
+///////////////////////////////////////////////////////////////////////
+class _EXPORT_CLASS processor_observer: virtual public processor_observer_implements {
+public:
+    typedef processor_observer_implements Implements;
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    enum exception {
+        exception_none = 0,
+        exception_failed,
+        exception_exit
+    };
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    virtual void on_processor_exception(processor& p, const exception& e) {
+    }
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+};
+
+typedef processor_observer processor_implements;
+typedef texta::base processor_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: processor
 ///////////////////////////////////////////////////////////////////////
@@ -52,9 +75,15 @@ public:
 
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+    processor(processor_observer& observer)
+    : mark_(TEXTA_T_PROCESSOR_MARK),
+      depth_(0),
+      observer_(observer) {
+    }
     processor()
     : mark_(TEXTA_T_PROCESSOR_MARK),
-      depth_(0) {
+      depth_(0),
+      observer_(*this) {
     }
     virtual ~processor() {
     }
@@ -63,20 +92,31 @@ public:
     ///////////////////////////////////////////////////////////////////////
     virtual bool expand(output& out, input& in) {
         bool success = true;
-        size_t count = 0;
-        char c = 0;
+        try {
+            size_t count = 0;
+            char c = 0;
 
-        if (0 > (count = in.read(&c, 1))) {
-            return false;
-        } else {
-            if (0 < (count)) {
-                size_t depth = depth_;
-                depth_ = 0;
-                success = expand(c, out, in, c);
-                depth_ = depth;
+            if (0 > (count = in.read(&c, 1))) {
+                return false;
+            } else {
+                if (0 < (count)) {
+                    size_t depth = depth_;
+                    depth_ = 0;
+                    success = expand(c, out, in, c);
+                    depth_ = depth;
+                }
             }
+        } catch (const exception& e) {
+            TEXTA_LOG_MESSAGE_DEBUG("...caught exception e = " << e);
+            observer_.on_processor_exception(*this, e);
         }
         return success;
+    }
+    virtual bool exit() {
+        exception e = exception_exit;
+        TEXTA_LOG_MESSAGE_DEBUG("...throwing exception e = exception_exit...");
+        throw (e);
+        return true;
     }
 
 protected:
@@ -649,6 +689,7 @@ protected:
 protected:
     char mark_;
     size_t depth_;
+    processor_observer& observer_;
     function_tree functions_;
     variable_tree variables_;
     string name_;

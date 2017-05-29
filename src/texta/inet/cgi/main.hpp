@@ -21,8 +21,7 @@
 #ifndef _TEXTA_INET_CGI_MAIN_HPP
 #define _TEXTA_INET_CGI_MAIN_HPP
 
-#include "texta/base/base.hpp"
-#include "coral/inet/cgi/main.hpp"
+#include "texta/base/cgi_main.hpp"
 
 #define BR (((this->is_content_type_html()))?("<br>\n"):("\n"))
 #define H1_ (((this->is_content_type_html()))?("<h1>\n"):(""))
@@ -38,8 +37,6 @@ namespace texta {
 namespace inet {
 namespace cgi {
 
-typedef ::coral::inet::cgi::main_implements main_implements;
-typedef ::coral::inet::cgi::main main_extends;
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 template
@@ -75,7 +72,7 @@ protected:
     virtual const char_t*
     form_value_has_chars(size_t& length, const char_t** names) const {
         const char_t* value = 0;
-        ::coral::inet::http::form::field* f;
+        http::form::field* f;
         if ((f = this->form().find(names))) {
             value = (f->value().has_chars(length));
         }
@@ -84,7 +81,7 @@ protected:
     virtual const char_t*
     form_value_chars(size_t& length, const char_t** names) const {
         const char_t* value = 0;
-        ::coral::inet::http::form::field* f;
+        http::form::field* f;
         if ((f = this->form().find(names))) {
             value = (f->value().chars(length));
         }
@@ -94,14 +91,14 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual const char_t* env_path_translated_has_chars(size_t& length) const {
-        ::coral::inet::cgi::environment::variable::value&
-        value = this->environment_[::coral::inet::cgi::environment::variable::PATH_TRANSLATED];
+        environment::variable::value& value
+        = this->environment_[environment::variable::PATH_TRANSLATED];
         const char_t* chars = value.has_chars(length);
         return chars;
     }
     virtual const char_t* env_path_info_has_chars(size_t& length) const {
-        ::coral::inet::cgi::environment::variable::value&
-        value = this->environment_[::coral::inet::cgi::environment::variable::PATH_INFO];
+        environment::variable::value& value
+        = this->environment_[environment::variable::PATH_INFO];
         const char_t* chars = value.has_chars(length);
         return chars;
     }
@@ -122,18 +119,15 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual const char_t* content_type_text() const {
-        const char_t* chars = ::coral::inet::http::content::type::name::of
-        (::coral::inet::http::content::type::text);
+        const char_t* chars = http::content::type::name::of(http::content::type::text);
         return chars;
     }
     virtual const char_t* content_type_html() const {
-        const char_t* chars = ::coral::inet::http::content::type::name::of
-        (::coral::inet::http::content::type::html);
+        const char_t* chars = http::content::type::name::of(http::content::type::html);
         return chars;
     }
     virtual const char_t* content_type_xml() const {
-        const char_t* chars = ::coral::inet::http::content::type::name::of
-        (::coral::inet::http::content::type::xml);
+        const char_t* chars = http::content::type::name::of(http::content::type::xml);
         return chars;
     }
 

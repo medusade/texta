@@ -146,11 +146,11 @@ protected:
     ///////////////////////////////////////////////////////////////////////
     virtual ssize_t set_variables_from_form(::texta::t::processor &p) {
         ssize_t count = 0;
-        ::coral::inet::http::form::fields::iterator
+        inet::http::form::fields::iterator
         b = this->form().begin(), e = this->form().end(), i;
 
         for (i = b; i != e; ++i) {
-            ::coral::inet::http::form::field& f = *i;
+            inet::http::form::field& f = *i;
             const char_t *name = f.name().has_chars(), *value = f.value().has_chars();
 
             TEXTA_LOG_MESSAGE_DEBUG("form name = " << chars_to_string(name) << " value = " << chars_to_string(value));

@@ -28,8 +28,7 @@ namespace t {
 
 class _EXPORT_CLASS function;
 class _EXPORT_CLASS function_item;
-//typedef xos::base::itemt<function&, function_item> function_item_extends;
-typedef xos::base::itemt<function_reference, function_item> function_item_extends;
+typedef itemt<function_reference, function_item> function_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_item
 ///////////////////////////////////////////////////////////////////////

@@ -22,7 +22,7 @@
 #define _TEXTA_T_FUNCTION_BRANCH_HPP
 
 #include "texta/t/function.hpp"
-#include "xos/base/avl/branch.hpp"
+//#include "xos/base/avl/branch.hpp"
 
 namespace texta {
 namespace t {
@@ -30,13 +30,13 @@ namespace t {
 class _EXPORT_CLASS function_branch;
 //typedef function& function_leaf;
 typedef function_reference function_leaf;
-typedef xos::base::avl::branch_implements function_branch_implements;
-typedef xos::base::avl::brancht
+typedef avl::branch_implements function_branch_implements;
+typedef avl::brancht
 <function_leaf, function_branch, function_branch_implements,
- xos::base::binary::brancht
- <function_leaf, function_branch, xos::base::binary::branch_implements,
-  xos::base::brancht<function_leaf, function_branch,
-  xos::base::branch_implements, xos::base::branch_extends> > > function_branch_extends;
+ binary::brancht
+ <function_leaf, function_branch, binary::branch_implements,
+  brancht<function_leaf, function_branch,
+  branch_implements, branch_extends> > > function_branch_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_branch
 ///////////////////////////////////////////////////////////////////////

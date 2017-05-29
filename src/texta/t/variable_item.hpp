@@ -52,8 +52,7 @@ protected:
     variable& v_;
 };
 class _EXPORT_CLASS variable_item;
-//typedef xos::base::itemt<variable&, variable_item> variable_item_extends;
-typedef xos::base::itemt<variable_reference, variable_item> variable_item_extends;
+typedef itemt<variable_reference, variable_item> variable_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: variable_item
 ///////////////////////////////////////////////////////////////////////

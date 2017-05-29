@@ -29,13 +29,13 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS variable_tree;
-typedef xos::base::avl::treet
+typedef avl::treet
 <variable_leaf, variable_branch, variable_tree,
- xos::base::avl::tree_implements, xos::base::binary::treet
+ avl::tree_implements, binary::treet
  <variable_leaf, variable_branch, variable_tree,
-  xos::base::binary::tree_implements, xos::base::treet
+  binary::tree_implements, treet
   <variable_leaf, variable_branch, variable_tree,
-   xos::base::tree_implements, xos::base::tree_extends> > > variable_tree_extends;
+   tree_implements, tree_extends> > > variable_tree_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: variable_tree
 ///////////////////////////////////////////////////////////////////////

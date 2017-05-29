@@ -74,9 +74,7 @@ protected:
 };
 
 class _EXPORT_CLASS function_parameter_item;
-//typedef xos::base::itemt
-//<function_parameter&, function_parameter_item> function_parameter_item_extends;
-typedef xos::base::itemt
+typedef itemt
 <function_parameter_reference, function_parameter_item> function_parameter_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_parameter_item
@@ -95,7 +93,7 @@ public:
 };
 
 class _EXPORT_CLASS function_parameter_list;
-typedef xos::base::listt
+typedef listt
 <function_parameter_list, function_parameter_item> function_parameter_list_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_parameter_list

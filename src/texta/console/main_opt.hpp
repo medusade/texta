@@ -21,30 +21,9 @@
 #ifndef _TEXTA_CONSOLE_MAIN_OPT_HPP
 #define _TEXTA_CONSOLE_MAIN_OPT_HPP
 
-#include "texta/base/base.hpp"
-#include "xos/base/getopt/main.hpp"
-#include "xos/base/getopt/main_opt.hpp"
-
-#define TEXTA_MAIN_LOGGING_OPTVAL_C XOS_MAIN_LOGGING_OPTVAL_C
-#define TEXTA_MAIN_LOGGING_OPTARG XOS_MAIN_LOGGING_OPTARG
-#define TEXTA_MAIN_LOGGING_OPTUSE XOS_MAIN_LOGGING_OPTUSE
-
-#define TEXTA_MAIN_HELP_OPTVAL_C XOS_MAIN_HELP_OPTVAL_C
-#define TEXTA_MAIN_HELP_OPTARG XOS_MAIN_HELP_OPTARG
-#define TEXTA_MAIN_HELP_OPTUSE XOS_MAIN_HELP_OPTUSE
+#include "texta/base/main.hpp"
 
 namespace texta {
-namespace console {
-
-typedef int main_opt_argument_t;
-enum {
-    MAIN_OPT_ARGUMENT_NONE     = XOS_MAIN_OPT_ARGUMENT_NONE,
-    MAIN_OPT_ARGUMENT_REQUIRED = XOS_MAIN_OPT_ARGUMENT_REQUIRED,
-    MAIN_OPT_ARGUMENT_OPTIONAL = XOS_MAIN_OPT_ARGUMENT_OPTIONAL
-};
-
-} // namespace console
-
 namespace app {
 namespace console {
 

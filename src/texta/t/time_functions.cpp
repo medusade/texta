@@ -19,7 +19,6 @@
 ///   Date: 5/23/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/t/functions.hpp"
-#include "xos/os/time.hpp"
 
 namespace texta {
 namespace t {
@@ -43,7 +42,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.month());
         r.append("/");
@@ -77,7 +76,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.year());
         out.write(r);
@@ -107,7 +106,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.month());
         out.write(r);
@@ -137,7 +136,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int((int)t.day());
         out.write(r);
@@ -167,7 +166,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.hour());
         r.append(":");
@@ -201,7 +200,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.hour());
         out.write(r);
@@ -231,7 +230,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.minute());
         out.write(r);
@@ -261,7 +260,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::os::current::time t;
+        os::current::time t;
         result r;
         r.append_int(t.second());
         out.write(r);

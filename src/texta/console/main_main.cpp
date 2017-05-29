@@ -19,7 +19,7 @@
 ///   Date: 6/2/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/console/main_main.hpp"
-#include "xos/base/main_main.cpp"
+#include "texta/base/main_main.cpp"
 
 namespace texta {
 namespace console {

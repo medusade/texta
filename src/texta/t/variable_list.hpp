@@ -27,7 +27,7 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS variable_list;
-typedef xos::base::listt
+typedef listt
 <variable_list, variable_item> variable_list_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: variable_list

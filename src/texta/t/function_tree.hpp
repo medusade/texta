@@ -29,13 +29,13 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS function_tree;
-typedef xos::base::avl::treet
+typedef avl::treet
 <function_leaf, function_branch, function_tree,
- xos::base::avl::tree_implements, xos::base::binary::treet
+ avl::tree_implements, binary::treet
  <function_leaf, function_branch, function_tree,
-  xos::base::binary::tree_implements, xos::base::treet
+  binary::tree_implements, treet
   <function_leaf, function_branch, function_tree,
-   xos::base::tree_implements, xos::base::tree_extends> > > function_tree_extends;
+   tree_implements, tree_extends> > > function_tree_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_tree
 ///////////////////////////////////////////////////////////////////////

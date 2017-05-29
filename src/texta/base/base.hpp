@@ -21,31 +21,13 @@
 #ifndef _TEXTA_BASE_BASE_HPP
 #define _TEXTA_BASE_BASE_HPP
 
-#include "xos/io/write/file.hpp"
-#include "xos/io/file/writer.hpp"
-#include "xos/io/writer.hpp"
-#include "xos/io/read/file.hpp"
-#include "xos/io/file/reader.hpp"
-#include "xos/io/reader.hpp"
-#include "xos/base/avl/branch.hpp"
-#include "xos/base/avl/tree.hpp"
-#include "xos/base/list.hpp"
-#include "xos/base/item.hpp"
-#include "xos/base/to_string.hpp"
-#include "xos/base/string.hpp"
-#include "xos/base/types.hpp"
-#include "xos/base/base.hpp"
-#include <list>
+#if !defined(USE_TEXTA_NADIR_BASE)
+#include "texta/xos/base/base.hpp"
+#else // !defined(USE_TEXTA_NADIR_BASE)
+#include "texta/nadir/base/base.hpp"
+#endif // !defined(USE_TEXTA_NADIR_BASE)
 
 namespace texta {
-
-typedef xos::base::implement_base implement_base;
-typedef xos::base::base base;
-typedef xos::base::chars_t chars_t;
-typedef xos::base::string string;
-typedef xos::base::pointer_to_string pointer_to_string;
-typedef xos::base::chars_to_string chars_to_string;
-typedef xos::base::char_to_string char_to_string;
 
 } // namespace texta
 

@@ -19,7 +19,6 @@
 ///   Date: 3/22/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/t/functions.hpp"
-#include "xos/fs/path.hpp"
 
 namespace texta {
 namespace t {
@@ -56,7 +55,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument &arg) const {
-        xos::fs::path path(arg.chars());
+        fs::path path(arg.chars());
         out.write(path.file_base_path());
         return true;
     }
@@ -84,7 +83,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument &arg) const {
-        xos::fs::path path(arg.chars());
+        fs::path path(arg.chars());
         out.write(path.volume());
         return true;
     }
@@ -114,7 +113,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument &arg) const {
-        xos::fs::path path(arg.chars());
+        fs::path path(arg.chars());
         out.write(path.file_extension());
         return true;
     }
@@ -142,7 +141,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument &arg) const {
-        xos::fs::path path(arg.chars());
+        fs::path path(arg.chars());
         out.write(path.file_name());
         return true;
     }
@@ -170,7 +169,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument &arg) const {
-        xos::fs::path path(arg.chars());
+        fs::path path(arg.chars());
         out.write(path.file_path());
         return true;
     }
@@ -198,7 +197,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::fs::path path;
+        fs::path path;
         out.write(&path.directory_separator(), 1);
         return true;
     }
@@ -226,7 +225,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::fs::path path;
+        fs::path path;
         out.write(&path.extension_separator(), 1);
         return true;
     }
@@ -254,7 +253,7 @@ public:
     virtual bool expand
     (output &out, processor &p,
      const function_argument_list &args) const {
-        xos::fs::path path;
+        fs::path path;
         out.write(&path.volume_separator(), 1);
         return true;
     }

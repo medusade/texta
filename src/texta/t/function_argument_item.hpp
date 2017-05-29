@@ -54,9 +54,7 @@ protected:
     function_argument& a_;
 };
 class _EXPORT_CLASS function_argument_item;
-//typedef xos::base::itemt
-//<function_argument&, function_argument_item> function_argument_item_extends;
-typedef xos::base::itemt
+typedef itemt
 <function_argument_reference, function_argument_item> function_argument_item_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_argument_item

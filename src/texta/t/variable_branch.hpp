@@ -27,13 +27,13 @@
 namespace texta {
 namespace t {
 
-typedef xos::base::avl::branch_implements variable_branch_implements;
-typedef xos::base::avl::brancht
+typedef avl::branch_implements variable_branch_implements;
+typedef avl::brancht
 <variable_leaf, variable_branch, variable_branch_implements,
- xos::base::binary::brancht
- <variable_leaf, variable_branch, xos::base::binary::branch_implements,
-  xos::base::brancht<variable_leaf, variable_branch,
-  xos::base::branch_implements, xos::base::branch_extends> > > variable_branch_extends;
+ binary::brancht
+ <variable_leaf, variable_branch, binary::branch_implements,
+  brancht<variable_leaf, variable_branch,
+  branch_implements, branch_extends> > > variable_branch_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: variable_branch
 ///////////////////////////////////////////////////////////////////////

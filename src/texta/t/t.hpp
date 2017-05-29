@@ -131,19 +131,19 @@ protected:
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 class _EXPORT_CLASS input_file_reader_implement
-: virtual public input, virtual public xos::io::file::attacher {
+: virtual public input, virtual public io::file::attacher {
 };
-typedef xos::io::file::readert
-<input_file_reader_implement, char, char> input_file_reader;
+typedef io::file::readert
+<input_file_reader_implement> input_file_reader;
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 class _EXPORT_CLASS input_file_implemnents
 : virtual public input_file_reader,
-  virtual public xos::io::file::opened_implemnents {
+  virtual public io::file::opened_implements {
 };
-typedef xos::io::read::filet
-<input_file_implemnents, xos::io::file::opened> input_file;
+typedef io::read::filet
+<input_file_implemnents, io::file::opened> input_file;
 
 } // namespace t
 } // namespace texta

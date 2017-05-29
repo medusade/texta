@@ -20,6 +20,12 @@
 ///////////////////////////////////////////////////////////////////////
 #include "texta/base/base.hpp"
 
+#if !defined(USE_TEXTA_NADIR_BASE)
+#include "texta/xos/base/base.hpp"
+#else // !defined(USE_TEXTA_NADIR_BASE)
+#include "texta/nadir/base/base.hpp"
+#endif // !defined(USE_TEXTA_NADIR_BASE)
+
 namespace texta {
 
 } // namespace texta

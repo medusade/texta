@@ -26,8 +26,6 @@
 namespace texta {
 namespace io {
 
-typedef xos::io::char_writer writer;
-
 } // namespace io
 } // namespace texta
 

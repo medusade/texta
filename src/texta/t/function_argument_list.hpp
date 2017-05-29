@@ -29,7 +29,7 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS function_argument_list;
-typedef xos::base::listt
+typedef listt
 <function_argument_list, function_argument_item> function_argument_list_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_argument_list

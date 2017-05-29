@@ -26,8 +26,6 @@
 namespace texta {
 namespace io {
 
-typedef xos::io::char_reader reader;
-
 } // namespace io
 } // namespace texta
 

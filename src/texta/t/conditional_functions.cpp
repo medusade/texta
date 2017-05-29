@@ -188,15 +188,13 @@ public:
      const function_argument_list &args) const {
         function_argument *todo = 0, *expr = 0;
         if ((todo = args.first_argument())) {
-            if ((expr = todo->next_argument())) {
-                function_argument did;
-                do {
-                    p.expand(did, *expr);
-                } while ((expr = expr->next_argument()));
-                out.write(did);
-                if ((meets(did))) {
-                    out.write(*todo);
+            if ((meets(*todo))) {
+                if ((expr = todo->next_argument())) {
+                    do {
+                        p.expand(out, *expr);
+                    } while ((expr = expr->next_argument()));
                 }
+                out.write(*todo);
             }
         }
         return true;
@@ -289,7 +287,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool meets(const function_argument& cond) const {
-        if ((cond.compare(no_))) {
+        if ((cond.compare(no_)) && (0 < (cond.length()))) {
             return true;
         }
         return false;
@@ -340,14 +338,14 @@ public:
   ("else-yes", "else-yes(cond,(do),(else),...)");
 
 ///////////////////////////////////////////////////////////////////////
-///  Class: no_function
+///  Class: not_no_function
 ///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS no_function: public function_extend {
+class _EXPORT_CLASS not_no_function: public function_extend {
 public:
     typedef function_extend Extends;
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    no_function
+    not_no_function
     (const char *name, const char *description, const char *no = "no")
     : Extends(name, description), no_(no) {
         static function_parameter parameter[]
@@ -361,18 +359,18 @@ public:
      const function_argument_list &args) const {
         function_argument *a = 0;
         if ((a = args.first_argument())) {
-            if ((meets((*a)))) {
-                while ((a = a->next_argument())) {
+            do {
+                if ((meets((*a)))) {
                     p.expand(out, *a);
                 }
-            }
+            } while ((a = a->next_argument()));
         }
         return true;
     }
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     virtual bool meets(const function_argument& cond) const {
-        if (!(cond.compare(no_))) {
+        if ((cond.compare(no_)) && (0 < (cond.length()))) {
             return true;
         }
         return false;
@@ -381,56 +379,8 @@ public:
     ///////////////////////////////////////////////////////////////////////
 protected:
     string no_;
-} the_no_function
-  ("no", "no(cond,(do),...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: yes_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS yes_function: public no_function {
-public:
-    typedef no_function Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    yes_function
-    (const char *name, const char *description, const char *yes = "yes")
-    : Extends(name, description, yes) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-} the_yes_function
-  ("yes", "yes(cond,(do),...)");
-
-///////////////////////////////////////////////////////////////////////
-///  Class: not_no_function
-///////////////////////////////////////////////////////////////////////
-class _EXPORT_CLASS not_no_function: public no_function {
-public:
-    typedef no_function Extends;
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    not_no_function
-    (const char *name, const char *description, const char *no = "no")
-    : Extends(name, description, no) {
-        static function_parameter parameter[]
-        = {{0,0}};
-        set_parameter(parameter);
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-    virtual bool meets(const function_argument& cond) const {
-        if ((cond.compare(no_))) {
-            return true;
-        }
-        return false;
-    }
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
 } the_not_no_function
-  ("not-no", "not-no(cond,(do),...)");
+  ("not-no", "not-no(cond,...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: not_yes_function
@@ -441,8 +391,8 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     not_yes_function
-    (const char *name, const char *description, const char *yes = "yes")
-    : Extends(name, description, yes) {
+    (const char *name, const char *description, const char *no = "yes")
+    : Extends(name, description, no) {
         static function_parameter parameter[]
         = {{0,0}};
         set_parameter(parameter);
@@ -450,7 +400,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
 } the_not_yes_function
-  ("not-yes", "not-yes(cond,(do),...)");
+  ("not-yes", "not-yes(cond,...)");
 
 ///////////////////////////////////////////////////////////////////////
 ///  Class: equal_function

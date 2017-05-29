@@ -28,7 +28,7 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS value_list;
-typedef xos::base::listt
+typedef listt
 <value_list, value_item> value_list_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: value_list

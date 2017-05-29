@@ -27,7 +27,7 @@ namespace texta {
 namespace t {
 
 class _EXPORT_CLASS function_list;
-typedef xos::base::listt<function_list, function_item> function_list_extends;
+typedef listt<function_list, function_item> function_list_extends;
 ///////////////////////////////////////////////////////////////////////
 ///  Class: function_list
 ///////////////////////////////////////////////////////////////////////
