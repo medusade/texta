@@ -19,6 +19,7 @@
 ///   Date: 3/18/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/app/console/texta/main.hpp"
+#include "texta/console/main_main.cpp"
 
 namespace texta {
 namespace app {

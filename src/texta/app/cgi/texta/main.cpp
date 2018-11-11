@@ -19,6 +19,7 @@
 ///   Date: 6/5/2016
 ///////////////////////////////////////////////////////////////////////
 #include "texta/app/cgi/texta/main.hpp"
+#include "texta/inet/cgi/main_main.cpp"
 
 namespace texta {
 namespace app {
