@@ -1,0 +1,308 @@
+########################################################################
+# Copyright (c) 1988-2023 $organization$
+#
+# This software is provided by the author and contributors ``as is''
+# and any express or implied warranties, including, but not limited to,
+# the implied warranties of merchantability and fitness for a particular
+# purpose are disclaimed. In no event shall the author or contributors
+# be liable for any direct, indirect, incidental, special, exemplary,
+# or consequential damages (including, but not limited to, procurement
+# of substitute goods or services; loss of use, data, or profits; or
+# business interruption) however caused and on any theory of liability,
+# whether in contract, strict liability, or tort (including negligence
+# or otherwise) arising in any way out of the use of this software,
+# even if advised of the possibility of such damage.
+#
+#   File: texta.pri
+#
+# Author: $author$
+#   Date: 3/5/2023
+#
+# generic QtCreator project .pri file for texta framework texta
+########################################################################
+# Depends: nadir;rostra;talas;medusa;coral
+
+OTHER_RPO = ../../../../../../..
+OTHER_PKG = ../../../../../..
+OTHER_PRJ = ../../../../..
+OTHER_BLD = ..
+
+THIRDPARTY_NAME = thirdparty
+THIRDPARTY_PKG = $${OTHER_PKG}/$${THIRDPARTY_NAME}
+THIRDPARTY_PRJ = $${OTHER_PRJ}/$${THIRDPARTY_NAME}
+THIRDPARTY_SRC = $${OTHER_PRJ}/source/$${THIRDPARTY_NAME}
+
+########################################################################
+# nadir
+NADIR_VERSION_MAJOR = 0
+NADIR_VERSION_MINOR = 0
+NADIR_VERSION_RELEASE = 0
+NADIR_VERSION = $${NADIR_VERSION_MAJOR}.$${NADIR_VERSION_MINOR}.$${NADIR_VERSION_RELEASE}
+NADIR_NAME = nadir
+NADIR_GROUP = $${NADIR_NAME}
+NADIR_SOURCE = source
+NADIR_CREDS = creds
+NADIR_DIR = $${NADIR_GROUP}/$${NADIR_NAME}-$${NADIR_VERSION}
+NADIR_PKG_DIR = $${NADIR_NAME}
+NADIR_BUILD_HOME = $${HOME}
+NADIR_HOME_BUILD = $${NADIR_BUILD_HOME}/build/$${NADIR_NAME}
+NADIR_HOME_BUILD_INCLUDE = $${NADIR_HOME_BUILD}/include
+NADIR_HOME_BUILD_LIB = $${NADIR_HOME_BUILD}/lib
+NADIR_THIRDPARTY_PKG = $${THIRDPARTY_PKG}/$${NADIR_DIR}
+NADIR_THIRDPARTY_PRJ = $${THIRDPARTY_PRJ}/$${NADIR_DIR}
+NADIR_THIRDPARTY_SRC = $${THIRDPARTY_SRC}/$${NADIR_PKG_DIR}
+NADIR_THIRDPARTY_SRC_GROUP = $${NADIR_GROUP}
+NADIR_THIRDPARTY_SRC_NAME = $${NADIR_NAME}
+NADIR_THIRDPARTY_SRC_DIR = $${THIRDPARTY_SRC}/$${NADIR_THIRDPARTY_SRC_GROUP}/$${NADIR_THIRDPARTY_SRC_NAME} 
+NADIR_PKG = $${OTHER_PKG}/$${NADIR_PKG_DIR}
+NADIR_PRJ = $${OTHER_PRJ}/$${NADIR_PKG_DIR}
+#NADIR_SRC = $${NADIR_THIRDPARTY_SRC_DIR}
+#NADIR_SRC = $${NADIR_THIRDPARTY_PKG}/$${NADIR_SOURCE}
+#NADIR_SRC = $${NADIR_THIRDPARTY_PRJ}/$${NADIR_SOURCE}
+NADIR_SRC = $${NADIR_PKG}/$${NADIR_SOURCE}
+#NADIR_SRC = $${NADIR_PRJ}/$${NADIR_SOURCE}
+NADIR_CRD_SRC = $${NADIR_PKG}/$${NADIR_CREDS}/$${NADIR_SOURCE}
+
+# nadir INCLUDEPATH
+#
+nadir_INCLUDEPATH += \
+$${NADIR_SRC} \
+$${NADIR_CRD_SRC} \
+
+# nadir DEFINES
+#
+nadir_DEFINES += \
+NO_USE_NADIR_BASE \
+NO_USE_XOS_LOGGER_INTERFACE \
+
+########################################################################
+# rostra
+ROSTRA_VERSION_MAJOR = 0
+ROSTRA_VERSION_MINOR = 0
+ROSTRA_VERSION_RELEASE = 0
+ROSTRA_VERSION = $${ROSTRA_VERSION_MAJOR}.$${ROSTRA_VERSION_MINOR}.$${ROSTRA_VERSION_RELEASE}
+ROSTRA_NAME = rostra
+ROSTRA_GROUP = $${ROSTRA_NAME}
+ROSTRA_SOURCE = source
+ROSTRA_CREDS = creds
+ROSTRA_DIR = $${ROSTRA_GROUP}/$${ROSTRA_NAME}-$${ROSTRA_VERSION}
+ROSTRA_PKG_DIR = $${ROSTRA_NAME}
+ROSTRA_BUILD_HOME = $${HOME}
+ROSTRA_HOME_BUILD = $${ROSTRA_BUILD_HOME}/build/$${ROSTRA_NAME}
+ROSTRA_HOME_BUILD_INCLUDE = $${ROSTRA_HOME_BUILD}/include
+ROSTRA_HOME_BUILD_LIB = $${ROSTRA_HOME_BUILD}/lib
+ROSTRA_THIRDPARTY_PKG = $${THIRDPARTY_PKG}/$${ROSTRA_DIR}
+ROSTRA_THIRDPARTY_PRJ = $${THIRDPARTY_PRJ}/$${ROSTRA_DIR}
+ROSTRA_THIRDPARTY_SRC = $${THIRDPARTY_SRC}/$${ROSTRA_PKG_DIR}
+ROSTRA_THIRDPARTY_SRC_GROUP = $${ROSTRA_GROUP}
+ROSTRA_THIRDPARTY_SRC_NAME = $${ROSTRA_NAME}
+ROSTRA_THIRDPARTY_SRC_DIR = $${THIRDPARTY_SRC}/$${ROSTRA_THIRDPARTY_SRC_GROUP}/$${ROSTRA_THIRDPARTY_SRC_NAME} 
+ROSTRA_PKG = $${OTHER_PKG}/$${ROSTRA_PKG_DIR}
+ROSTRA_PRJ = $${OTHER_PRJ}/$${ROSTRA_PKG_DIR}
+#ROSTRA_SRC = $${ROSTRA_THIRDPARTY_SRC_DIR}
+#ROSTRA_SRC = $${ROSTRA_THIRDPARTY_PKG}/$${ROSTRA_SOURCE}
+#ROSTRA_SRC = $${ROSTRA_THIRDPARTY_PRJ}/$${ROSTRA_SOURCE}
+ROSTRA_SRC = $${ROSTRA_PKG}/$${ROSTRA_SOURCE}
+#ROSTRA_SRC = $${ROSTRA_PRJ}/$${ROSTRA_SOURCE}
+ROSTRA_CRD_SRC = $${ROSTRA_PKG}/$${ROSTRA_CREDS}/$${ROSTRA_SOURCE}
+
+# rostra INCLUDEPATH
+#
+rostra_INCLUDEPATH += \
+$${ROSTRA_SRC} \
+$${ROSTRA_CRD_SRC} \
+
+# rostra DEFINES
+#
+rostra_DEFINES += \
+
+########################################################################
+# talas
+TALAS_VERSION_MAJOR = 0
+TALAS_VERSION_MINOR = 0
+TALAS_VERSION_RELEASE = 0
+TALAS_VERSION = $${TALAS_VERSION_MAJOR}.$${TALAS_VERSION_MINOR}.$${TALAS_VERSION_RELEASE}
+TALAS_NAME = talas
+TALAS_GROUP = $${TALAS_NAME}
+TALAS_SOURCE = source
+TALAS_CREDS = creds
+TALAS_DIR = $${TALAS_GROUP}/$${TALAS_NAME}-$${TALAS_VERSION}
+TALAS_PKG_DIR = $${TALAS_NAME}
+TALAS_BUILD_HOME = $${HOME}
+TALAS_HOME_BUILD = $${TALAS_BUILD_HOME}/build/$${TALAS_NAME}
+TALAS_HOME_BUILD_INCLUDE = $${TALAS_HOME_BUILD}/include
+TALAS_HOME_BUILD_LIB = $${TALAS_HOME_BUILD}/lib
+TALAS_THIRDPARTY_PKG = $${THIRDPARTY_PKG}/$${TALAS_DIR}
+TALAS_THIRDPARTY_PRJ = $${THIRDPARTY_PRJ}/$${TALAS_DIR}
+TALAS_THIRDPARTY_SRC = $${THIRDPARTY_SRC}/$${TALAS_PKG_DIR}
+TALAS_THIRDPARTY_SRC_GROUP = $${TALAS_GROUP}
+TALAS_THIRDPARTY_SRC_NAME = $${TALAS_NAME}
+TALAS_THIRDPARTY_SRC_DIR = $${THIRDPARTY_SRC}/$${TALAS_THIRDPARTY_SRC_GROUP}/$${TALAS_THIRDPARTY_SRC_NAME} 
+TALAS_PKG = $${OTHER_PKG}/$${TALAS_PKG_DIR}
+TALAS_PRJ = $${OTHER_PRJ}/$${TALAS_PKG_DIR}
+#TALAS_SRC = $${TALAS_THIRDPARTY_SRC_DIR}
+#TALAS_SRC = $${TALAS_THIRDPARTY_PKG}/$${TALAS_SOURCE}
+#TALAS_SRC = $${TALAS_THIRDPARTY_PRJ}/$${TALAS_SOURCE}
+TALAS_SRC = $${TALAS_PKG}/$${TALAS_SOURCE}
+#TALAS_SRC = $${TALAS_PRJ}/$${TALAS_SOURCE}
+TALAS_CRD_SRC = $${TALAS_PKG}/$${TALAS_CREDS}/$${TALAS_SOURCE}
+
+# talas INCLUDEPATH
+#
+talas_INCLUDEPATH += \
+$${TALAS_SRC} \
+$${TALAS_CRD_SRC} \
+
+# talas DEFINES
+#
+talas_DEFINES += \
+
+########################################################################
+# medusa
+MEDUSA_VERSION_MAJOR = 0
+MEDUSA_VERSION_MINOR = 0
+MEDUSA_VERSION_RELEASE = 0
+MEDUSA_VERSION = $${MEDUSA_VERSION_MAJOR}.$${MEDUSA_VERSION_MINOR}.$${MEDUSA_VERSION_RELEASE}
+MEDUSA_NAME = medusa
+MEDUSA_GROUP = $${MEDUSA_NAME}
+MEDUSA_SOURCE = source
+MEDUSA_CREDS = creds
+MEDUSA_DIR = $${MEDUSA_GROUP}/$${MEDUSA_NAME}-$${MEDUSA_VERSION}
+MEDUSA_PKG_DIR = $${MEDUSA_NAME}
+MEDUSA_BUILD_HOME = $${HOME}
+MEDUSA_HOME_BUILD = $${MEDUSA_BUILD_HOME}/build/$${MEDUSA_NAME}
+MEDUSA_HOME_BUILD_INCLUDE = $${MEDUSA_HOME_BUILD}/include
+MEDUSA_HOME_BUILD_LIB = $${MEDUSA_HOME_BUILD}/lib
+MEDUSA_THIRDPARTY_PKG = $${THIRDPARTY_PKG}/$${MEDUSA_DIR}
+MEDUSA_THIRDPARTY_PRJ = $${THIRDPARTY_PRJ}/$${MEDUSA_DIR}
+MEDUSA_THIRDPARTY_SRC = $${THIRDPARTY_SRC}/$${MEDUSA_PKG_DIR}
+MEDUSA_THIRDPARTY_SRC_GROUP = $${MEDUSA_GROUP}
+MEDUSA_THIRDPARTY_SRC_NAME = $${MEDUSA_NAME}
+MEDUSA_THIRDPARTY_SRC_DIR = $${THIRDPARTY_SRC}/$${MEDUSA_THIRDPARTY_SRC_GROUP}/$${MEDUSA_THIRDPARTY_SRC_NAME} 
+MEDUSA_PKG = $${OTHER_PKG}/$${MEDUSA_PKG_DIR}
+MEDUSA_PRJ = $${OTHER_PRJ}/$${MEDUSA_PKG_DIR}
+#MEDUSA_SRC = $${MEDUSA_THIRDPARTY_SRC_DIR}
+#MEDUSA_SRC = $${MEDUSA_THIRDPARTY_PKG}/$${MEDUSA_SOURCE}
+#MEDUSA_SRC = $${MEDUSA_THIRDPARTY_PRJ}/$${MEDUSA_SOURCE}
+MEDUSA_SRC = $${MEDUSA_PKG}/$${MEDUSA_SOURCE}
+#MEDUSA_SRC = $${MEDUSA_PRJ}/$${MEDUSA_SOURCE}
+MEDUSA_CRD_SRC = $${MEDUSA_PKG}/$${MEDUSA_CREDS}/$${MEDUSA_SOURCE}
+
+# medusa INCLUDEPATH
+#
+medusa_INCLUDEPATH += \
+$${MEDUSA_SRC} \
+$${MEDUSA_CRD_SRC} \
+
+# medusa DEFINES
+#
+medusa_DEFINES += \
+
+########################################################################
+# coral
+CORAL_VERSION_MAJOR = 0
+CORAL_VERSION_MINOR = 0
+CORAL_VERSION_RELEASE = 0
+CORAL_VERSION = $${CORAL_VERSION_MAJOR}.$${CORAL_VERSION_MINOR}.$${CORAL_VERSION_RELEASE}
+CORAL_NAME = coral
+CORAL_GROUP = $${CORAL_NAME}
+CORAL_SOURCE = source
+CORAL_CREDS = creds
+CORAL_DIR = $${CORAL_GROUP}/$${CORAL_NAME}-$${CORAL_VERSION}
+CORAL_PKG_DIR = $${CORAL_NAME}
+CORAL_BUILD_HOME = $${HOME}
+CORAL_HOME_BUILD = $${CORAL_BUILD_HOME}/build/$${CORAL_NAME}
+CORAL_HOME_BUILD_INCLUDE = $${CORAL_HOME_BUILD}/include
+CORAL_HOME_BUILD_LIB = $${CORAL_HOME_BUILD}/lib
+CORAL_THIRDPARTY_PKG = $${THIRDPARTY_PKG}/$${CORAL_DIR}
+CORAL_THIRDPARTY_PRJ = $${THIRDPARTY_PRJ}/$${CORAL_DIR}
+CORAL_THIRDPARTY_SRC = $${THIRDPARTY_SRC}/$${CORAL_PKG_DIR}
+CORAL_THIRDPARTY_SRC_GROUP = $${CORAL_GROUP}
+CORAL_THIRDPARTY_SRC_NAME = $${CORAL_NAME}
+CORAL_THIRDPARTY_SRC_DIR = $${THIRDPARTY_SRC}/$${CORAL_THIRDPARTY_SRC_GROUP}/$${CORAL_THIRDPARTY_SRC_NAME} 
+CORAL_PKG = $${OTHER_PKG}/$${CORAL_PKG_DIR}
+CORAL_PRJ = $${OTHER_PRJ}/$${CORAL_PKG_DIR}
+#CORAL_SRC = $${CORAL_THIRDPARTY_SRC_DIR}
+#CORAL_SRC = $${CORAL_THIRDPARTY_PKG}/$${CORAL_SOURCE}
+#CORAL_SRC = $${CORAL_THIRDPARTY_PRJ}/$${CORAL_SOURCE}
+CORAL_SRC = $${CORAL_PKG}/$${CORAL_SOURCE}
+#CORAL_SRC = $${CORAL_PRJ}/$${CORAL_SOURCE}
+CORAL_CRD_SRC = $${CORAL_PKG}/$${CORAL_CREDS}/$${CORAL_SOURCE}
+
+# coral INCLUDEPATH
+#
+coral_INCLUDEPATH += \
+$${CORAL_SRC} \
+$${CORAL_CRD_SRC} \
+
+# coral DEFINES
+#
+coral_DEFINES += \
+
+
+########################################################################
+# texta
+TEXTA_NAME = texta
+TEXTA_SOURCE = source
+TEXTA_CREDS = creds
+
+TEXTA_PKG = ../../../../..
+TEXTA_BLD = ../..
+
+TEXTA_PRJ = $${TEXTA_PKG}
+TEXTA_BIN = $${TEXTA_BLD}/bin
+TEXTA_LIB = $${TEXTA_BLD}/lib
+TEXTA_SRC = $${TEXTA_PKG}/$${TEXTA_SOURCE}
+TEXTA_CRD_SRC = $${TEXTA_PKG}/$${TEXTA_CREDS}/$${TEXTA_SOURCE}
+
+# texta BUILD_CONFIG
+#
+CONFIG(debug, debug|release) {
+BUILD_CONFIG = Debug
+texta_DEFINES += DEBUG_BUILD
+} else {
+BUILD_CONFIG = Release
+texta_DEFINES += RELEASE_BUILD
+}
+
+# texta INCLUDEPATH
+#
+texta_INCLUDEPATH += \
+$${TEXTA_SRC} \
+$${TEXTA_CRD_SRC} \
+$${coral_INCLUDEPATH} \
+$${medusa_INCLUDEPATH} \
+$${talas_INCLUDEPATH} \
+$${rostra_INCLUDEPATH} \
+$${nadir_INCLUDEPATH} \
+$${build_texta_INCLUDEPATH} \
+
+# texta DEFINES
+#
+texta_DEFINES += \
+$${nadir_DEFINES} \
+$${rostra_DEFINES} \
+$${talas_DEFINES} \
+$${medusa_DEFINES} \
+$${coral_DEFINES} \
+$${build_texta_DEFINES} \
+
+# texta LIBS
+#
+texta_LIBS += \
+-L$${TEXTA_LIB}/lib$${TEXTA_NAME} \
+-l$${TEXTA_NAME} \
+
+# texta function SOURCES
+#
+texta_function_SOURCES += \
+$${TEXTA_SRC}/texta/t/network_functions.cpp \
+$${TEXTA_SRC}/texta/t/hash_functions.cpp \
+$${TEXTA_SRC}/texta/t/file_functions.cpp \
+$${TEXTA_SRC}/texta/t/string_functions.cpp \
+$${TEXTA_SRC}/texta/t/time_functions.cpp \
+$${TEXTA_SRC}/texta/t/logical_functions.cpp \
+$${TEXTA_SRC}/texta/t/conditional_functions.cpp \
+$${TEXTA_SRC}/texta/t/block_functions.cpp \
+$${TEXTA_SRC}/texta/t/base_functions.cpp \
+$${TEXTA_SRC}/texta/t/functions.cpp \
